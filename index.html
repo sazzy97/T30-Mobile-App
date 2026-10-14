@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>T30 — Devotion Without Distraction | Mobile App Prototype</title>
+<meta name="description" content="Interactive high-fidelity mobile prototype for T30, a daily prayer and scripture companion with grace-based streaks, Bible reader, Discover hub and live devotions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ============ ICON SPRITE ============ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="fg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#8B1E1E"/><stop offset=".55" stop-color="#C9441F"/><stop offset="1" stop-color="#E7C563"/></linearGradient>
+  </defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-bible" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M12 6v7M9.5 8.5h5"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 7 4.5z"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1.2"/><rect x="14" y="4" width="4" height="16" rx="1.2"/></symbol>
+  <symbol id="i-back15" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-fwd15" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></symbol>
+  <symbol id="i-sunrise" viewBox="0 0 24 24"><path d="M12 2v6M4.93 10.93l1.41 1.41M2 18h2M20 18h2M19.07 10.93l-1.41 1.41M22 22H2M8 5l4-3 4 3M16 18a4 4 0 0 0-8 0"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
+  <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-feather" viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><path d="M16 8 2 22M17.5 15H9"/></symbol>
+  <symbol id="i-type" viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></symbol>
+  <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-pip" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><rect x="12" y="11" width="7" height="6" rx="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="i-insta" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+  <symbol id="i-pray" viewBox="0 0 24 24"><path d="M12 3c-1 2-2 4.5-2 7v4l-4 3.5V21h6"/><path d="M12 3c1 2 2 4.5 2 7v4l4 3.5V21h-6"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 1.5.8 2.5 2 2.5-1-3 0-6 1-9z"/></symbol>
+</svg>
+
+<div class="stage">
+
+  <!-- ============ LEFT: SCREEN NAVIGATOR ============ -->
+  <aside class="panel nav-panel" aria-label="Screen navigator">
+    <div class="brand"><div class="logo-mark">T30</div><h1>T30</h1></div>
+    <p class="brand-sub">Devotion Without Distraction. A clickable prototype (light mode). Tap inside the phone or jump to any screen.</p>
+
+    <nav id="screen-nav">
+      <div class="nav-group">
+        <h4>Onboarding · Epic 1</h4>
+        <button class="nav-link" data-nav="splash"><span class="num">1</span>Splash / Welcome</button>
+        <button class="nav-link" data-nav="signin"><span class="num">2</span>Sign In</button>
+        <button class="nav-link" data-nav="goals"><span class="num">3</span>Growth Goals</button>
+        <button class="nav-link" data-nav="time"><span class="num">4</span>Time with God</button>
+        <button class="nav-link" data-nav="translation"><span class="num">5</span>Translation</button>
+        <button class="nav-link" data-nav="prefs"><span class="num">6</span>Reminders &amp; Privacy</button>
+      </div>
+      <div class="nav-group">
+        <h4>Home · Epic 3 &amp; 4</h4>
+        <button class="nav-link" data-nav="home"><span class="num">7</span>Daily Dashboard</button>
+        <button class="nav-link" data-nav="live"><span class="num">8</span>Live Devotion</button>
+      </div>
+      <div class="nav-group">
+        <h4>Bible · Epic 2</h4>
+        <button class="nav-link" data-nav="bible"><span class="num">9</span>Bible Reader</button>
+        <button class="nav-link" data-nav="bible" data-sheet="1"><span class="num">10</span>Highlight &amp; Note</button>
+      </div>
+      <div class="nav-group">
+        <h4>Discover · Epic 3</h4>
+        <button class="nav-link" data-nav="discover"><span class="num">11</span>Discover Hub</button>
+        <button class="nav-link" data-nav="plan"><span class="num">12</span>Plan Detail</button>
+        <button class="nav-link" data-nav="wotd"><span class="num">13</span>Word of the Day</button>
+      </div>
+      <div class="nav-group">
+        <h4>Profile</h4>
+        <button class="nav-link" data-nav="profile"><span class="num">14</span>Profile &amp; Growth</button>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ============ CENTER: PHONE ============ -->
+  <main class="center">
+    <div class="phone-wrap" id="phoneWrap">
+      <div class="phone">
+        <div class="viewport" id="viewport">
+          <div class="island"></div>
+          <div class="statusbar">
+            <span>9:41</span>
+            <span class="sb-icons">
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+              <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M8 2.5c2.3 0 4.4.9 6 2.4l1.1-1.2A10.4 10.4 0 0 0 8 .8C5.3.8 2.8 1.8.9 3.7L2 4.9a8.6 8.6 0 0 1 6-2.4zm0 3.3c1.4 0 2.7.5 3.7 1.4l1.1-1.2A7.2 7.2 0 0 0 8 4.1 7.2 7.2 0 0 0 3.2 6l1.1 1.2c1-.9 2.3-1.4 3.7-1.4zm0 3.3c-.6 0-1.2.2-1.6.6L8 11.5l1.6-1.8c-.4-.4-1-.6-1.6-.6z"/></svg>
+              <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor"/><rect x="24.5" y="4.5" width="1.6" height="4" rx=".8" fill="currentColor" opacity=".5"/></svg>
+            </span>
+          </div>
+
+          <!-- ==================== 1. SPLASH ==================== -->
+          <section class="screen splash" data-screen="splash" data-dark="1">
+            <div class="bg"><img src="assets/splash_hero.jpg" alt="Person standing on a hilltop at sunrise"></div>
+            <div class="splash-inner">
+              <div class="logo-mark fade-up">T30</div>
+              <div>
+                <h2 class="fade-up d1">A gentle rhythm for <em>prayer</em> and scripture.</h2>
+                <p class="fade-up d2">Just 5–10 minutes a day. No guilt, just grace. Build a daily habit with God that lasts.</p>
+                <div class="fade-up d3">
+                  <button class="btn btn-primary" id="btn-begin" data-go="goals">Begin Journey <svg class="ico sm"><use href="#i-right"/></svg></button>
+                  <button class="btn btn-ghost" id="btn-have-account" data-go="signin">I already have an account</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== 2. SIGN IN ==================== -->
+          <section class="screen" data-screen="signin">
+            <div class="ob">
+              <div class="ob-top"><button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button></div>
+              <h2 class="h-display">Welcome back</h2>
+              <p class="lead">Pick up right where you left off. Your streak is waiting.</p>
+              <div class="ob-body">
+                <div class="field"><label for="in-email">Email</label><div class="input"><svg class="ico"><use href="#i-mail"/></svg><input id="in-email" type="email" placeholder="you@example.com" value="grace.adeyemi@mail.com"></div></div>
+                <div class="field"><label for="in-pass">Password</label><div class="input"><svg class="ico"><use href="#i-lock"/></svg><input id="in-pass" type="password" value="password123"><svg class="ico"><use href="#i-eye"/></svg></div></div>
+                <div style="text-align:right;margin:-2px 0 20px"><span class="link" id="link-forgot">Forgot password?</span></div>
+                <button class="btn btn-primary" id="btn-signin" data-go="home">Sign In</button>
+                <div class="divider">or continue with</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <button class="btn btn-dark" id="btn-apple" data-go="home"><svg width="18" height="20" viewBox="0 0 17 20" fill="#fff"><path d="M14.1 10.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM11.6 3c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>Continue with Apple</button>
+                  <button class="btn btn-outline" id="btn-google" data-go="home"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continue with Google</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== 3. GOALS ==================== -->
+          <section class="screen" data-screen="goals">
+            <div class="ob">
+              <div class="ob-top">
+                <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+                <div class="progress"><span class="on"></span><span></span><span></span><span></span></div>
+              </div>
+              <div class="ob-step">STEP 1 OF 4</div>
+              <h2 class="h-display">What's your focus this season?</h2>
+              <p class="lead">Choose one or more. We'll shape your devotionals and plans around them.</p>
+              <div class="ob-body">
+                <div class="chip-grid" id="goal-chips">
+                  <button class="chip selected" id="goal-prayer"><svg class="ico"><use href="#i-pray"/></svg>Prayer</button>
+                  <button class="chip" id="goal-study"><svg class="ico"><use href="#i-bible"/></svg>Bible Study</button>
+                  <button class="chip" id="goal-consistency"><svg class="ico"><use href="#i-repeat"/></svg>Consistency</button>
+                  <button class="chip selected" id="goal-discipline"><svg class="ico"><use href="#i-target"/></svg>Discipline</button>
+                  <button class="chip" id="goal-forgiveness"><svg class="ico"><use href="#i-feather"/></svg>Forgiveness</button>
+                  <button class="chip" id="goal-peace"><svg class="ico"><use href="#i-leaf"/></svg>Peace</button>
+                </div>
+                <div class="card" style="margin-top:28px;padding:16px;display:flex;gap:12px;align-items:center;background:var(--secondary-50);box-shadow:none">
+                  <svg class="ico" style="color:var(--secondary)"><use href="#i-sparkle"/></svg>
+                  <p class="t-sm" style="color:var(--ink-80);line-height:1.45"><b id="goal-count">2 goals</b> selected. You can change these anytime in your profile.</p>
+                </div>
+              </div>
+              <div class="ob-foot"><button class="btn btn-primary" id="btn-goals-continue" data-go="time">Continue</button></div>
+            </div>
+          </section>
+
+          <!-- ==================== 4. TIME WITH GOD ==================== -->
+          <section class="screen" data-screen="time">
+            <div class="ob">
+              <div class="ob-top">
+                <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+                <div class="progress"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+              </div>
+              <div class="ob-step">STEP 2 OF 4</div>
+              <h2 class="h-display">When would you like to meet with God?</h2>
+              <p class="lead">We'll send a gentle reminder at this time each day.</p>
+              <div class="ob-body">
+                <div class="opt-list" data-single>
+                  <button class="opt selected" id="time-morning"><span class="opt-ico"><svg class="ico"><use href="#i-sunrise"/></svg></span><span class="opt-txt"><b>Morning</b><span>6:00 AM · Start the day with Him</span></span><span class="radio"></span></button>
+                  <button class="opt" id="time-afternoon"><span class="opt-ico"><svg class="ico"><use href="#i-sun"/></svg></span><span class="opt-txt"><b>Afternoon</b><span>12:00 PM · A midday reset</span></span><span class="radio"></span></button>
+                  <button class="opt" id="time-evening"><span class="opt-ico"><svg class="ico"><use href="#i-moon"/></svg></span><span class="opt-txt"><b>Evening</b><span>6:00 PM · Reflect and rest</span></span><span class="radio"></span></button>
+                  <button class="opt" id="time-custom"><span class="opt-ico"><svg class="ico"><use href="#i-clock"/></svg></span><span class="opt-txt"><b>Custom time</b><span>Pick your own window</span></span><span class="radio"></span></button>
+                </div>
+              </div>
+              <div class="ob-foot">
+                <button class="btn btn-primary" id="btn-time-continue" data-go="translation">Continue</button>
+                <button class="btn btn-ghost" id="btn-time-later" data-go="translation">I'll decide later</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== 5. TRANSLATION ==================== -->
+          <section class="screen" data-screen="translation">
+            <div class="ob">
+              <div class="ob-top">
+                <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+                <div class="progress"><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
+              </div>
+              <div class="ob-step">STEP 3 OF 4</div>
+              <h2 class="h-display">Choose your Bible translation</h2>
+              <div class="input" style="margin:18px 0 16px"><svg class="ico"><use href="#i-search"/></svg><input id="trans-search" placeholder="Search translations"></div>
+              <div class="ob-body">
+                <div class="opt-list" data-single id="trans-list">
+                  <button class="opt selected" data-name="niv new international version"><span class="trans-badge">NIV</span><span class="opt-txt"><b>New International Version</b><span>Clear, modern and widely read</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="esv english standard version"><span class="trans-badge">ESV</span><span class="opt-txt"><b>English Standard Version</b><span>Word-for-word accuracy</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="nlt new living translation"><span class="trans-badge">NLT</span><span class="opt-txt"><b>New Living Translation</b><span>Warm, easy to read</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="kjv king james version"><span class="trans-badge">KJV</span><span class="opt-txt"><b>King James Version</b><span>Classic and poetic</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="csb christian standard bible"><span class="trans-badge">CSB</span><span class="opt-txt"><b>Christian Standard Bible</b><span>Accurate yet readable</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="nrsv new revised standard version"><span class="trans-badge">NRSV</span><span class="opt-txt"><b>New Revised Standard</b><span>Scholarly and inclusive</span></span><span class="radio"></span></button>
+                  <button class="opt" data-name="msg the message"><span class="trans-badge">MSG</span><span class="opt-txt"><b>The Message</b><span>Contemporary paraphrase</span></span><span class="radio"></span></button>
+                </div>
+              </div>
+              <div class="ob-foot"><button class="btn btn-primary" id="btn-trans-continue" data-go="prefs">Continue</button></div>
+            </div>
+          </section>
+
+          <!-- ==================== 6. REMINDER TONE + PRIVACY ==================== -->
+          <section class="screen" data-screen="prefs">
+            <div class="ob">
+              <div class="ob-top">
+                <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+                <div class="progress"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
+              </div>
+              <div class="ob-step">STEP 4 OF 4</div>
+              <h2 class="h-display">How should we remind you?</h2>
+              <div class="ob-body" style="padding-top:18px">
+                <div class="notif-preview">
+                  <div class="logo-mark">T30</div>
+                  <div style="flex:1"><div style="display:flex;justify-content:space-between"><b>T30</b><span class="t-xs muted">6:00 AM</span></div><p id="notif-text">Good morning 🌅 Your quiet moment with God is ready whenever you are.</p></div>
+                </div>
+                <div class="tone-row" id="tone-row">
+                  <button class="tone selected" data-tone="Good morning 🌅 Your quiet moment with God is ready whenever you are."><span class="emo">🕊️</span>Gentle Nudge</button>
+                  <button class="tone" data-tone="“Be still, and know that I am God.” Psalm 46:10. Come sit with Him."><span class="emo">📖</span>Thoughtful Verse</button>
+                  <button class="tone" data-tone="It's 6:00 AM. Time for today's devotion (6 min)."><span class="emo">⏰</span>Simple Reminder</button>
+                </div>
+                <h3 class="h-md" style="margin-bottom:12px">Privacy &amp; community</h3>
+                <div class="setting-row"><div class="s-txt"><b>Public profile</b><span>Let friends find and follow you</span></div><button class="toggle" id="tg-public" aria-label="Public profile"></button></div>
+                <div class="setting-row"><div class="s-txt"><b>Share my progress</b><span>Show streaks to your community</span></div><button class="toggle" id="tg-progress" aria-label="Share progress"></button></div>
+                <div class="secure-note"><svg class="ico sm"><use href="#i-lock"/></svg>Your data is encrypted and never sold.</div>
+              </div>
+              <div class="ob-foot"><button class="btn btn-primary" id="btn-enter" data-go="home">Enter T30 <svg class="ico sm"><use href="#i-right"/></svg></button></div>
+            </div>
+          </section>
+
+          <!-- ==================== 7. HOME ==================== -->
+          <section class="screen with-tabs" data-screen="home" data-tab="home">
+            <div class="home-head">
+              <img class="avatar" src="assets/avatar_user.jpg" alt="Grace">
+              <div class="greet"><span>Wednesday, 14 Oct</span><h3>Good morning, Grace</h3></div>
+              <button class="icon-btn" id="btn-notifs" aria-label="Notifications"><svg class="ico"><use href="#i-bell"/></svg><span class="dot"></span></button>
+            </div>
+
+            <div class="card streak-card">
+              <div class="streak-top">
+                <div class="flame-wrap"><svg class="flame" viewBox="0 0 24 24"><path fill="url(#fg)" d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 1.5.8 2.5 2 2.5-1-3 0-6 1-9z"/></svg></div>
+                <div><div class="streak-num">12<small>day streak</small></div><span class="t-xs muted">Best: 21 days</span></div>
+                <button class="grace-chip" id="btn-grace"><svg class="ico xs"><use href="#i-shield"/></svg>1 Grace Pass</button>
+              </div>
+              <div class="week">
+                <div class="day done"><i><svg class="ico xs"><use href="#i-check"/></svg></i>M</div>
+                <div class="day done"><i><svg class="ico xs"><use href="#i-check"/></svg></i>T</div>
+                <div class="day today"><i>W</i>W</div>
+                <div class="day"><i>T</i>T</div>
+                <div class="day"><i>F</i>F</div>
+                <div class="day"><i>S</i>S</div>
+                <div class="day grace"><i><svg class="ico xs"><use href="#i-shield"/></svg></i>S</div>
+              </div>
+              <div class="grace-note"><svg class="ico sm"><use href="#i-shield"/></svg><span>Grace Pass covered last Sunday, so your streak is safe. Grace over guilt. 💛</span></div>
+            </div>
+
+            <div class="img-card live-card" id="card-live" data-go="live">
+              <img src="assets/live_sermon.jpg" alt="Pastor preaching live">
+              <div class="shade"></div>
+              <div class="tl"><span class="badge badge-live"><span class="pulse"></span>LIVE</span></div>
+              <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-eye"/></svg>1.2k</span></div>
+              <div class="bl">
+                <span class="t-xs" style="opacity:.8">Morning Devotion · Started 8 min ago</span>
+                <h4>Walking in Purpose with Pst. James</h4>
+                <div class="row">
+                  <div class="viewers"><div class="avatars"><span style="background:#C9961A"></span><span style="background:#A32A2A"></span><span style="background:#555"></span></div>+1,214 watching</div>
+                  <span class="join-btn"><svg class="ico xs fill"><use href="#i-play"/></svg>Join</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Today's devotion</h3><a data-go="plan">View plan</a></div>
+            <div class="card devotion-card" id="card-devotion" data-go="plan">
+              <div class="thumb"><img src="assets/cave_light.jpg" alt="Faith over Fear"></div>
+              <div class="info">
+                <span><span class="badge badge-goldsoft">Day 3 of 8</span></span>
+                <h4>Faith over Fear</h4>
+                <span class="t-xs muted">Psalm 56 · 6 min read</span>
+                <div class="bar"><span style="width:37%"></span></div>
+              </div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Quick actions</h3></div>
+            <div class="quick">
+              <button class="qa" id="qa-read" data-go="bible"><span class="qi r"><svg class="ico lg"><use href="#i-bible"/></svg></span>Read</button>
+              <button class="qa" id="qa-pray" data-go="discover"><span class="qi g"><svg class="ico lg"><use href="#i-pray"/></svg></span>Pray</button>
+              <button class="qa" id="qa-declare" data-go="discover"><span class="qi r"><svg class="ico lg"><use href="#i-megaphone"/></svg></span>Declare</button>
+              <button class="qa" id="qa-journal" data-go="bible" data-sheet="1"><span class="qi g"><svg class="ico lg"><use href="#i-pen"/></svg></span>Journal</button>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Catch up</h3><a>See all</a></div>
+            <div class="hscroll">
+              <div class="catch-card"><div class="img-card"><img src="assets/water_walk.jpg" alt=""><div class="shade"></div><div class="tl"><span class="badge badge-dark"><svg class="ico xs fill"><use href="#i-play"/></svg>42:10</span></div></div><b>Stepping Out in Faith</b><span>Sunday Service · 2 days ago</span></div>
+              <div class="catch-card"><div class="img-card"><img src="assets/candle_peace.jpg" alt=""><div class="shade"></div><div class="tl"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-headphones"/></svg>18:30</span></div></div><b>Night Prayer for Peace</b><span>Audio devotional</span></div>
+              <div class="catch-card"><div class="img-card"><img src="assets/wheat_sunrise.jpg" alt=""><div class="shade"></div><div class="tl"><span class="badge badge-dark"><svg class="ico xs fill"><use href="#i-play"/></svg>25:00</span></div></div><b>Harvest Season</b><span>Midweek · 5 days ago</span></div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Word of the day</h3></div>
+            <div class="wotd-mini" id="card-wotd" data-go="wotd">
+              <div class="lbl">Wednesday's Word</div>
+              <p>“Be strong and courageous. Do not be afraid; for the Lord your God will be with you wherever you go.”</p>
+              <div class="row"><span>Joshua 1:9 · NIV</span><span style="display:flex;gap:6px;align-items:center;font-weight:600">Share <svg class="ico sm"><use href="#i-share"/></svg></span></div>
+            </div>
+            <div style="height:20px"></div>
+          </section>
+
+          <!-- ==================== 8. LIVE ==================== -->
+          <section class="screen live" data-screen="live" data-dark="1">
+            <div class="live-video">
+              <img src="assets/live_sermon.jpg" alt="Live sermon" style="object-position:62% center">
+              <div class="top">
+                <button class="icon-btn glass" data-back aria-label="Close"><svg class="ico"><use href="#i-down"/></svg></button>
+                <span class="badge badge-live"><span class="pulse"></span>LIVE</span>
+                <span class="badge badge-dark"><svg class="ico xs"><use href="#i-eye"/></svg><span id="viewer-count">1,218</span></span>
+                <span class="sp"></span>
+                <button class="icon-btn glass" aria-label="Picture in picture" id="btn-pip"><svg class="ico"><use href="#i-pip"/></svg></button>
+                <button class="icon-btn glass" aria-label="Share"><svg class="ico"><use href="#i-share"/></svg></button>
+              </div>
+              <div class="live-info">
+                <h3>Walking in Purpose</h3>
+                <div class="host"><img src="assets/live_sermon.jpg" style="width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:65% 25%" alt="">Pst. James Okafor · Morning Devotion</div>
+              </div>
+            </div>
+            <div class="chat" id="chat">
+              <div class="msg"><span class="ma" style="background:#C9961A">TA</span><div><b>Tolu A.</b>Good morning family! 🙏</div></div>
+              <div class="msg"><span class="ma" style="background:#A32A2A">MK</span><div><b>Mike K.</b>This word is right on time</div></div>
+              <div class="msg"><span class="ma" style="background:#555">SE</span><div><b>Sarah E.</b>Joining from Lagos ❤️</div></div>
+              <div class="msg"><span class="ma" style="background:#8B6B1A">DO</span><div><b>David O.</b>Amen! Purpose over pressure 🔥</div></div>
+            </div>
+            <div class="floaters" id="floaters"></div>
+            <div class="live-input">
+              <div class="fake-in">Say something kind…</div>
+              <button class="amen-btn" id="btn-amen">🙏 Amen</button>
+            </div>
+          </section>
+
+          <!-- ==================== 9. BIBLE ==================== -->
+          <section class="screen with-tabs" data-screen="bible" data-tab="bible" style="padding-bottom:200px">
+            <div class="bible-top">
+              <button class="sel-pill" id="btn-book">John 3 <svg class="ico sm"><use href="#i-down"/></svg></button>
+              <button class="sel-pill tr" id="btn-translation">NIV</button>
+              <span class="sp"></span>
+              <button class="icon-btn" aria-label="Search"><svg class="ico sm"><use href="#i-search"/></svg></button>
+              <button class="icon-btn" aria-label="Text settings"><svg class="ico sm"><use href="#i-type"/></svg></button>
+            </div>
+            <article class="chapter">
+              <div class="ch-num">3</div>
+              <h2>Jesus Teaches Nicodemus</h2>
+              <p class="scripture" id="scripture">
+                <span class="verse" data-v="1"><sup>1</sup>Now there was a Pharisee, a man named Nicodemus who was a member of the Jewish ruling council. </span>
+                <span class="verse" data-v="2"><sup>2</sup>He came to Jesus at night and said, “Rabbi, we know that you are a teacher who has come from God. For no one could perform the signs you are doing if God were not with him.” </span>
+                <span class="verse hl-rose" data-v="3"><sup>3</sup>Jesus replied, “Very truly I tell you, no one can see the kingdom of God unless they are born again.” </span>
+                <span class="verse" data-v="4"><sup>4</sup>“How can someone be born when they are old?” Nicodemus asked. “Surely they cannot enter a second time into their mother’s womb to be born!” </span>
+                <span class="verse" data-v="5"><sup>5</sup>Jesus answered, “Very truly I tell you, no one can enter the kingdom of God unless they are born of water and the Spirit.” </span>
+              </p>
+              <div class="sub">God So Loved the World</div>
+              <p class="scripture">
+                <span class="verse hl-gold" data-v="16"><sup>16</sup>For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.</span><span class="note-ind" title="Has a note"><svg class="ico"><use href="#i-pen"/></svg></span>
+                <span class="verse" data-v="17"><sup>17</sup>For God did not send his Son into the world to condemn the world, but to save the world through him. </span>
+                <span class="verse hl-sage" data-v="18"><sup>18</sup>Whoever believes in him is not condemned, but whoever does not believe stands condemned already because they have not believed in the name of God’s one and only Son. </span>
+                <span class="verse" data-v="19"><sup>19</sup>This is the verdict: Light has come into the world, but people loved darkness instead of light because their deeds were evil. </span>
+                <span class="verse" data-v="20"><sup>20</sup>Everyone who does evil hates the light, and will not come into the light for fear that their deeds will be exposed. </span>
+                <span class="verse" data-v="21"><sup>21</sup>But whoever lives by the truth comes into the light, so that it may be seen plainly that what they have done has been done in the sight of God.</span>
+              </p>
+              <div style="display:flex;justify-content:space-between;margin-top:30px">
+                <button class="btn btn-white btn-sm"><svg class="ico sm"><use href="#i-left"/></svg>John 2</button>
+                <button class="btn btn-white btn-sm">John 4<svg class="ico sm"><use href="#i-right"/></svg></button>
+              </div>
+            </article>
+          </section>
+
+          <!-- ==================== 11. DISCOVER ==================== -->
+          <section class="screen with-tabs" data-screen="discover" data-tab="discover">
+            <div class="disc-head">
+              <h1 class="h-display" style="font-size:34px">Discover</h1>
+              <button class="icon-btn" aria-label="Search"><svg class="ico"><use href="#i-search"/></svg></button>
+            </div>
+            <div class="pad"><div class="pills" id="disc-pills">
+              <button class="pill active">For You</button>
+              <button class="pill">Devotionals</button>
+              <button class="pill">Plans</button>
+              <button class="pill">Prayer</button>
+              <button class="pill">Declarations</button>
+            </div></div>
+
+            <div class="section-head"><h3 class="h-lg">Crafted for you</h3></div>
+            <div class="hscroll" id="hero-scroll">
+              <div class="img-card hero-card" data-go="plan">
+                <img src="assets/cave_light.jpg" alt="Faith over Fear"><div class="shade"></div>
+                <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>8 days</span></div>
+                <div class="bl"><h3>Faith over Fear</h3><div class="meta"><svg class="ico xs"><use href="#i-users"/></svg>99,841 studying</div></div>
+              </div>
+              <div class="img-card hero-card" data-go="plan">
+                <img src="assets/water_walk.jpg" alt="Walk on Water"><div class="shade"></div>
+                <div class="tl"><span class="badge badge-new">NEW</span></div>
+                <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>14 days</span></div>
+                <div class="bl"><h3>Step Out of the Boat</h3><div class="meta"><svg class="ico xs"><use href="#i-users"/></svg>42,190 studying</div></div>
+              </div>
+              <div class="img-card hero-card" data-go="plan">
+                <img src="assets/splash_hero.jpg" alt="Morning Glory" style="object-position:center 60%"><div class="shade"></div>
+                <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>21 days</span></div>
+                <div class="bl"><h3>New Mercies Every Morning</h3><div class="meta"><svg class="ico xs"><use href="#i-users"/></svg>63,502 studying</div></div>
+              </div>
+            </div>
+            <div class="dots" id="hero-dots"><span class="on"></span><span></span><span></span></div>
+
+            <div class="section-head"><h3 class="h-lg">Speak life</h3></div>
+            <div class="tiles">
+              <div class="tile red"><span class="ti"><svg class="ico"><use href="#i-megaphone"/></svg></span><div><b>Declarations</b><span>“I am more than a conqueror”</span></div></div>
+              <div class="tile gold"><span class="ti"><svg class="ico"><use href="#i-sparkle"/></svg></span><div><b>Confessions</b><span>Daily faith confessions</span></div></div>
+              <div class="tile dark wide"><span class="ti"><svg class="ico"><use href="#i-pray"/></svg></span><div style="flex:1"><b>Prayer Companion</b><span>Guided prayer for anxiety, healing, family &amp; more</span></div><svg class="ico" style="opacity:.6"><use href="#i-right"/></svg></div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Prayer</h3><a>See all</a></div>
+            <div class="hscroll">
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/prayer_bible.jpg" alt=""><div class="tl"><span class="badge badge-new">NEW</span></div><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>7 days</span></div></div><b>Prayers of the Patriarchs</b><span>Abraham, Isaac &amp; Jacob</span></div>
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/candle_peace.jpg" alt=""><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>5 days</span></div></div><b>Peace in the Night</b><span>Evening prayers</span></div>
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/wheat_sunrise.jpg" alt=""><div class="tl"><span class="badge badge-new">NEW</span></div><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-calendar"/></svg>10 days</span></div></div><b>Gratitude Harvest</b><span>Thanksgiving prayers</span></div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Devotionals</h3><a>See all</a></div>
+            <div class="hscroll">
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/water_walk.jpg" alt=""><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-clock"/></svg>6 min</span></div></div><b>When the Storm Rages</b><span>Trusting God in chaos</span></div>
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/cave_light.jpg" alt=""><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-clock"/></svg>8 min</span></div></div><b>Light in the Cave</b><span>Elijah's restoration</span></div>
+              <div class="plan-card" data-go="plan"><div class="img-card"><img src="assets/prayer_bible.jpg" alt=""><div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-clock"/></svg>5 min</span></div></div><b>The Quiet Place</b><span>Learning stillness</span></div>
+            </div>
+            <div style="height:16px"></div>
+          </section>
+
+          <!-- ==================== 12. PLAN DETAIL ==================== -->
+          <section class="screen" data-screen="plan" data-dark="1">
+            <div class="plan-hero">
+              <img src="assets/cave_light.jpg" alt="Faith over Fear">
+              <div class="top">
+                <button class="icon-btn glass" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+                <div style="display:flex;gap:8px">
+                  <button class="icon-btn glass" aria-label="Save"><svg class="ico"><use href="#i-bookmark"/></svg></button>
+                  <button class="icon-btn glass" aria-label="Share"><svg class="ico"><use href="#i-share"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <div class="plan-body">
+              <span class="badge badge-goldsoft">BIBLE PLAN · PRAYER</span>
+              <h1 class="h-display" style="margin-top:10px">Faith over Fear</h1>
+              <div class="plan-meta">
+                <span class="badge badge-soft"><svg class="ico xs"><use href="#i-calendar"/></svg>8 days</span>
+                <span class="badge badge-soft"><svg class="ico xs"><use href="#i-clock"/></svg>6 min/day</span>
+                <span class="badge badge-soft"><svg class="ico xs"><use href="#i-users"/></svg>99,841 studying</span>
+              </div>
+              <p class="plan-desc">Fear is loud, but faith is louder. Over eight days, walk through Elijah’s cave, David’s battles and Peter’s stormy sea to find courage that rests in who God is.</p>
+              <div class="card plan-prog">
+                <div class="ring">
+                  <svg width="58" height="58"><circle cx="29" cy="29" r="24" stroke="#EAEAEA" stroke-width="6" fill="none"/><circle cx="29" cy="29" r="24" stroke="#C9961A" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="94"/></svg>
+                  <b>2/8</b>
+                </div>
+                <div><b style="font-size:15px">You're 25% through</b><p class="t-sm muted">Keep going. Day 3 takes about 6 minutes.</p></div>
+              </div>
+              <h3 class="h-lg" style="margin-bottom:12px">Daily readings</h3>
+              <div class="day-list">
+                <div class="day-item done"><span class="dn"><svg class="ico sm"><use href="#i-check"/></svg></span><div class="dt"><b>When Fear Knocks</b><span>Psalm 56 · Completed</span></div></div>
+                <div class="day-item done"><span class="dn"><svg class="ico sm"><use href="#i-check"/></svg></span><div class="dt"><b>Elijah in the Cave</b><span>1 Kings 19 · Completed</span></div></div>
+                <div class="day-item current"><span class="dn">3</span><div class="dt"><b>The Still Small Voice</b><span>1 Kings 19:11–13 · Today</span></div><svg class="ico" style="color:var(--secondary)"><use href="#i-headphones"/></svg></div>
+                <div class="day-item locked"><span class="dn">4</span><div class="dt"><b>David & the Giant</b><span>1 Samuel 17</span></div><svg class="ico sm"><use href="#i-lock"/></svg></div>
+                <div class="day-item locked"><span class="dn">5</span><div class="dt"><b>Peter on the Water</b><span>Matthew 14:22–33</span></div><svg class="ico sm"><use href="#i-lock"/></svg></div>
+              </div>
+            </div>
+            <div class="sticky-cta" style="position:sticky;margin-top:-130px"><button class="btn btn-primary" id="btn-continue-day" data-go="bible">Continue Day 3 <svg class="ico sm"><use href="#i-right"/></svg></button></div>
+          </section>
+
+          <!-- ==================== 13. WORD OF THE DAY ==================== -->
+          <section class="screen" data-screen="wotd">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>Word of the Day</h3>
+              <button class="icon-btn" aria-label="Save" id="btn-save-wotd"><svg class="ico"><use href="#i-bookmark"/></svg></button>
+            </div>
+            <div class="share-card t-red" id="share-card">
+              <div class="sc-top"><span>Wednesday · Oct 14</span><span>Word of the Day</span></div>
+              <div>
+                <div class="quote">Be strong and courageous. Do not be afraid; for the Lord your God will be with you wherever you go.</div>
+                <div class="ref" style="margin-top:14px">Joshua 1:9 · NIV</div>
+              </div>
+              <div class="wm"><i>T30</i>T30</div>
+            </div>
+            <div class="templates" id="templates">
+              <button class="tpl on" data-t="t-red" style="background:var(--grad-primary)" aria-label="Red template"></button>
+              <button class="tpl" data-t="t-gold" style="background:var(--grad-gold)" aria-label="Gold template"></button>
+              <button class="tpl" data-t="t-img" style="background:url('assets/wheat_sunrise.jpg') center/cover" aria-label="Image template"></button>
+              <button class="tpl" data-t="t-light" style="background:#fff" aria-label="Light template"></button>
+            </div>
+            <div class="share-targets">
+              <button class="st" data-toast="Shared to Instagram Stories"><span class="si" style="background:linear-gradient(45deg,#F9A13A,#E1306C,#833AB4)"><svg class="ico"><use href="#i-insta"/></svg></span>Stories</button>
+              <button class="st" data-toast="Opening WhatsApp…"><span class="si" style="background:#25D366"><svg class="ico"><use href="#i-message"/></svg></span>WhatsApp</button>
+              <button class="st" data-toast="Saved to Photos"><span class="si" style="background:var(--secondary)"><svg class="ico"><use href="#i-download"/></svg></span>Save</button>
+              <button class="st" data-toast="Opening share sheet…"><span class="si" style="background:var(--ink)"><svg class="ico"><use href="#i-more"/></svg></span>More</button>
+            </div>
+          </section>
+
+          <!-- ==================== 14. PROFILE ==================== -->
+          <section class="screen with-tabs" data-screen="profile" data-tab="profile">
+            <div class="prof-head">
+              <button class="icon-btn settings" aria-label="Settings"><svg class="ico"><use href="#i-settings"/></svg></button>
+              <div class="prof-avatar"><img src="assets/avatar_user.jpg" alt="Grace Adeyemi"></div>
+              <h2>Grace Adeyemi</h2>
+              <p class="t-sm muted">Walking with T30 since Aug 2026</p>
+            </div>
+            <div class="card stats">
+              <div class="stat"><b><svg class="ico sm" style="color:var(--primary)"><use href="#i-flame"/></svg>12</b><span>Day streak</span></div>
+              <div class="stat"><b>48</b><span>Days with God</span></div>
+              <div class="stat"><b>36</b><span>Highlights</span></div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Growth goals</h3><a>Edit</a></div>
+            <div class="pad" style="display:flex;gap:8px;flex-wrap:wrap">
+              <span class="chip chip-sm selected"><svg class="ico"><use href="#i-pray"/></svg>Prayer</span>
+              <span class="chip chip-sm selected"><svg class="ico"><use href="#i-target"/></svg>Discipline</span>
+              <span class="chip chip-sm"><svg class="ico"><use href="#i-plus"/></svg>Add goal</span>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">October rhythm</h3><span class="t-sm muted">13 of 14 days 🔥</span></div>
+            <div class="card heat">
+              <div class="heat-grid" id="heat"></div>
+              <div class="heat-legend">
+                <span><i style="background:var(--primary)"></i>Completed</span>
+                <span><i style="background:var(--secondary)"></i>Grace Pass</span>
+                <span><i style="background:var(--ink-05)"></i>Upcoming</span>
+              </div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Saved highlights</h3><a>See all</a></div>
+            <div class="hscroll">
+              <div class="card hl-item"><p>“For God so loved the world that he gave his one and only Son…”</p><span>John 3:16</span></div>
+              <div class="card hl-item" style="border-color:var(--primary)"><p>“Be still, and know that I am God.”</p><span>Psalm 46:10</span></div>
+              <div class="card hl-item" style="border-color:#8FB580"><p>“His mercies are new every morning.”</p><span>Lamentations 3:23</span></div>
+            </div>
+
+            <div class="section-head"><h3 class="h-lg">Settings</h3></div>
+            <div class="card list-card">
+              <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-bell"/></svg></span><span class="lt">Reminders<small>Morning · Gentle Nudge</small></span><span class="lv">6:00 AM<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+              <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-bible"/></svg></span><span class="lt">Bible translation</span><span class="lv">NIV<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+              <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-globe"/></svg></span><span class="lt">Public profile<small>Friends can find you</small></span><button class="toggle" aria-label="Public profile"></button></div>
+              <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-users"/></svg></span><span class="lt">Share progress</span><button class="toggle" aria-label="Share progress"></button></div>
+              <div class="list-row" data-go="splash" style="cursor:pointer"><span class="li" style="color:var(--primary);background:var(--primary-50)"><svg class="ico sm"><use href="#i-logout"/></svg></span><span class="lt red">Sign out</span></div>
+            </div>
+            <div style="height:20px"></div>
+          </section>
+
+          <!-- ============ SHARED OVERLAYS ============ -->
+          <div class="audio-bar hidden" id="audio-bar">
+            <div class="audio-row">
+              <div class="audio-art"><svg class="ico"><use href="#i-headphones"/></svg></div>
+              <div class="audio-info"><b>John 3 · NIV</b><span id="audio-time">2:14 / 6:32</span></div>
+              <button class="a-btn" id="a-back" aria-label="Back 15 seconds"><svg class="ico"><use href="#i-back15"/></svg><small>15</small></button>
+              <button class="a-btn play" id="a-play" aria-label="Play"><svg class="ico fill" id="a-play-ico"><use href="#i-play"/></svg></button>
+              <button class="a-btn" id="a-fwd" aria-label="Forward 15 seconds"><svg class="ico"><use href="#i-fwd15"/></svg><small>15</small></button>
+              <button class="speed" id="a-speed">1x</button>
+            </div>
+            <div class="a-progress"><span id="a-prog"></span></div>
+          </div>
+
+          <div class="sheet-backdrop" id="sheet-backdrop"></div>
+          <div class="sheet" id="verse-sheet">
+            <div class="grabber"></div>
+            <div class="sheet-head"><h3 id="sheet-ref">John 3:16</h3><button class="icon-btn" id="sheet-close" style="width:36px;height:36px;box-shadow:none;background:var(--ink-05)" aria-label="Close"><svg class="ico sm"><use href="#i-x"/></svg></button></div>
+            <p class="sheet-verse" id="sheet-text"></p>
+            <div class="colors" id="hl-colors">
+              <button class="color-dot" data-c="hl-gold" style="background:var(--hl-gold)" aria-label="Gold"></button>
+              <button class="color-dot" data-c="hl-rose" style="background:var(--hl-rose)" aria-label="Rose"></button>
+              <button class="color-dot" data-c="hl-sage" style="background:var(--hl-sage)" aria-label="Sage"></button>
+              <button class="color-dot" data-c="hl-sky" style="background:var(--hl-sky)" aria-label="Sky"></button>
+              <button class="color-dot clear" data-c="" aria-label="Clear"><svg class="ico sm"><use href="#i-x"/></svg></button>
+            </div>
+            <div class="actions">
+              <button class="act" data-toast="Verse copied"><span class="ai"><svg class="ico"><use href="#i-copy"/></svg></span>Copy</button>
+              <button class="act" data-toast="Saved to highlights"><span class="ai"><svg class="ico"><use href="#i-bookmark"/></svg></span>Save</button>
+              <button class="act" data-go="wotd"><span class="ai"><svg class="ico"><use href="#i-image"/></svg></span>Image</button>
+              <button class="act" data-toast="Opening share sheet…"><span class="ai"><svg class="ico"><use href="#i-share"/></svg></span>Share</button>
+            </div>
+            <div class="note-box">
+              <textarea id="note-text" placeholder="Write a note on this verse…">God's love isn't earned. It's given. Remind me of this when I feel unworthy.</textarea>
+              <div class="note-foot">
+                <div class="seg" id="note-vis"><button class="on"><svg class="ico xs"><use href="#i-lock"/></svg>Private</button><button><svg class="ico xs"><use href="#i-users"/></svg>Friends</button></div>
+                <button class="btn btn-primary btn-sm" id="btn-save-note">Save note</button>
+              </div>
+            </div>
+          </div>
+
+          <nav class="tabbar hidden" id="tabbar" aria-label="Main navigation">
+            <button class="tab" data-tabgo="home" id="tab-home"><svg class="ico"><use href="#i-home"/></svg><span>Home</span></button>
+            <button class="tab" data-tabgo="bible" id="tab-bible"><svg class="ico"><use href="#i-bible"/></svg><span>Bible</span></button>
+            <button class="tab" data-tabgo="discover" id="tab-discover"><svg class="ico"><use href="#i-compass"/></svg><span>Discover</span></button>
+            <button class="tab" data-tabgo="profile" id="tab-profile"><svg class="ico"><use href="#i-user"/></svg><span>Profile</span></button>
+          </nav>
+
+          <div class="toast" id="toast"><svg class="ico sm"><use href="#i-check"/></svg><span id="toast-text"></span></div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </div>
+    <div class="hint">Use <kbd>←</kbd> <kbd>→</kbd> to move between screens</div>
+  </main>
+
+  <!-- ============ RIGHT: DESIGN TOKENS ============ -->
+  <aside class="panel tokens-panel" aria-label="Design system">
+    <div class="tok-title">Design System</div>
+    <div class="tok-sub">T30 · Light mode v1</div>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:var(--primary)"></div><div class="meta"><b>Primary</b><span>#8B1E1E</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--secondary)"></div><div class="meta"><b>Secondary</b><span>#C9961A</span></div></div>
+      <div class="swatch"><div class="chip" style="background:var(--ink)"></div><div class="meta"><b>Black</b><span>#141414</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#fff;border-bottom:1px solid var(--ink-10)"></div><div class="meta"><b>White</b><span>#FFFFFF</span></div></div>
+      <div class="swatch" style="grid-column:span 2"><div class="chip" style="background:var(--bg);border-bottom:1px solid var(--ink-10)"></div><div class="meta"><b>Background</b><span>#F6F6F6</span></div></div>
+    </div>
+    <div class="type-sample"><div class="lbl">Display · Fraunces</div><div class="disp">Faith over Fear</div></div>
+    <div class="type-sample"><div class="lbl">Body · Inter</div><div class="body">A gentle rhythm for prayer and scripture, 5–10 minutes a day.</div></div>
+    <div class="type-sample">
+      <div class="lbl">Components</div>
+      <button class="btn btn-primary btn-sm" style="width:100%">Primary Button</button>
+      <div class="comp-row">
+        <span class="badge badge-new">NEW</span>
+        <span class="badge badge-live"><span class="pulse"></span>LIVE</span>
+        <span class="badge badge-soft">8 days</span>
+        <span class="badge badge-goldsoft">Grace Pass</span>
+      </div>
+      <div class="comp-row"><span class="chip chip-sm selected">Prayer</span><span class="chip chip-sm">Peace</span></div>
+      <div class="comp-row" style="align-items:center"><span class="toggle on"></span><span class="toggle"></span></div>
+    </div>
+  </aside>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
