@@ -294,20 +294,35 @@
 
             <div class="card streak-card">
               <div class="streak-top">
-                <div class="flame-wrap"><svg class="flame" viewBox="0 0 24 24"><path fill="url(#fg)" d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 1.5.8 2.5 2 2.5-1-3 0-6 1-9z"/></svg></div>
-                <div><div class="streak-num">12<small>day streak</small></div><span class="t-xs muted">Best: 21 days</span></div>
-                <button class="grace-chip" id="btn-grace"><svg class="ico xs"><use href="#i-shield"/></svg>1 Grace Pass</button>
+                <div class="flame-wrap" data-go="streak" style="cursor:pointer"><svg class="flame" viewBox="0 0 24 24"><path fill="url(#fg)" d="M12 2c1 3.5 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 1.5.8 2.5 2 2.5-1-3 0-6 1-9z"/></svg></div>
+                <div data-go="streak" style="cursor:pointer"><div class="streak-num">12<small>day streak</small></div><span class="t-xs muted">Best: 21 days</span></div>
+                <button class="grace-chip" id="btn-grace"><svg class="ico xs"><use href="#i-shield"/></svg><span id="grace-count">1 Grace Pass</span></button>
               </div>
               <div class="week">
                 <div class="day done"><i><svg class="ico xs"><use href="#i-check"/></svg></i>M</div>
                 <div class="day done"><i><svg class="ico xs"><use href="#i-check"/></svg></i>T</div>
-                <div class="day today"><i>W</i>W</div>
+                <div class="day today" id="day-today"><i>W</i>W</div>
                 <div class="day"><i>T</i>T</div>
                 <div class="day"><i>F</i>F</div>
                 <div class="day"><i>S</i>S</div>
                 <div class="day grace"><i><svg class="ico xs"><use href="#i-shield"/></svg></i>S</div>
               </div>
-              <div class="grace-note"><svg class="ico sm"><use href="#i-shield"/></svg><span>Grace Pass covered last Sunday, so your streak is safe. Grace over guilt. 💛</span></div>
+              <div class="grace-note" id="grace-note"><svg class="ico sm"><use href="#i-shield"/></svg><span id="grace-note-text">Grace Pass covered last Sunday, so your streak is safe. Grace over guilt. 💛</span></div>
+              <div class="streak-actions">
+                <button class="btn btn-gold btn-sm" id="btn-use-grace" style="flex:1;height:40px"><svg class="ico sm"><use href="#i-shield"/></svg>Use Grace Pass</button>
+                <button class="btn btn-outline btn-sm" data-go="streak" style="height:40px">Full year <svg class="ico sm"><use href="#i-right"/></svg></button>
+              </div>
+            </div>
+
+            <!-- Grace Pass Confirmation Sheet -->
+            <div class="sf-sheet-bg" id="grace-sheet-bg"></div>
+            <div class="sf-sheet" id="grace-sheet">
+              <div class="grab"></div>
+              <div class="sf-warn" style="background:var(--secondary-50);color:var(--secondary-700)"><svg class="ico lg"><use href="#i-shield"/></svg></div>
+              <h3 class="h-lg" style="text-align:center">Use your Grace Pass?</h3>
+              <p class="t-sm muted" style="text-align:center;margin:6px 0 14px">Life gets busy—and that’s okay. Applying your Grace Pass protects today’s <b>12-day streak</b> without guilt. You have <b>1 pass</b> remaining this week.</p>
+              <button class="btn btn-gold" id="btn-confirm-grace"><svg class="ico sm"><use href="#i-shield"/></svg>Apply Grace Pass for Today</button>
+              <button class="btn btn-ghost" id="btn-cancel-grace">Cancel</button>
             </div>
 
             <div class="img-card live-card" id="card-live" data-go="live">
@@ -1018,8 +1033,8 @@
               <p class="t-sm muted">Walking with T30 since Aug 2026</p>
             </div>
             <div class="card stats">
-              <div class="stat"><b><svg class="ico sm" style="color:var(--primary)"><use href="#i-flame"/></svg>12</b><span>Day streak</span></div>
-              <div class="stat"><b>48</b><span>Days with God</span></div>
+              <div class="stat" data-go="streak" style="cursor:pointer"><b><svg class="ico sm" style="color:var(--primary)"><use href="#i-flame"/></svg>12</b><span>Day streak</span></div>
+              <div class="stat" data-go="streak" style="cursor:pointer"><b>48</b><span>Days with God</span></div>
               <div class="stat"><b>36</b><span>Highlights</span></div>
             </div>
 

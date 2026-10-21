@@ -121,7 +121,6 @@
 
   $$('.toggle').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
   $('#link-forgot').addEventListener('click', () => toast('Reset link sent to your email'));
-  $('#btn-grace').addEventListener('click', () => toast('Grace Pass protects 1 missed day each week'));
   $('#btn-notifs').addEventListener('click', () => toast('No new notifications'));
   $('#btn-save-wotd').addEventListener('click', () => toast('Saved to your collection'));
   $('#btn-enter').addEventListener('click', () => setTimeout(() => toast('Welcome to T30, Grace 💛'), 450));
@@ -273,11 +272,36 @@
      ========================================================== */
   // Move in-screen sheets into the phone viewport so they overlay correctly
   $$('.sf-sheet, .sf-sheet-bg').forEach(el => viewport.appendChild(el));
-  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'cm-sheet': 'cm-bg' };
+  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'cm-sheet': 'cm-bg', 'grace-sheet': 'grace-sheet-bg' };
   function openSf(id) { $('#' + id).classList.add('open'); $('#' + sheetPairs[id]).classList.add('open'); }
   function closeSf() { $$('.sf-sheet, .sf-sheet-bg').forEach(e => e.classList.remove('open')); }
   Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', closeSf));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSf(); });
+
+  // Grace Pass on Home
+  let graceUsed = false;
+  function promptGrace() {
+    if (graceUsed) { toast('Grace Pass already active for today 💛'); return; }
+    openSf('grace-sheet');
+  }
+  $('#btn-grace').addEventListener('click', promptGrace);
+  $('#btn-use-grace').addEventListener('click', promptGrace);
+  $('#btn-cancel-grace').addEventListener('click', closeSf);
+  $('#btn-confirm-grace').addEventListener('click', () => {
+    graceUsed = true;
+    closeSf();
+    const todayEl = $('#day-today');
+    todayEl.classList.remove('today');
+    todayEl.classList.add('grace');
+    todayEl.querySelector('i').innerHTML = '<svg class="ico xs"><use href="#i-shield"/></svg>';
+    $('#grace-count').textContent = '0 Grace Passes';
+    $('#btn-grace').classList.add('used');
+    const useBtn = $('#btn-use-grace');
+    useBtn.disabled = true;
+    useBtn.innerHTML = '<svg class="ico sm"><use href="#i-check"/></svg>Grace Pass Active Today';
+    $('#grace-note-text').textContent = 'Grace Pass applied for today! Your 12-day streak is safe. Grace over guilt. 💛';
+    toast('Grace Pass applied — streak protected! 🛡️');
+  });
 
   // Generic pill toggles inside sub-feature screens
   $$('.sf-pills').forEach(g => g.addEventListener('click', e => {

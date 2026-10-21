@@ -372,7 +372,10 @@ img { display: block; max-width: 100%; }
 .day.today i { background: #fff; border: 2px dashed var(--primary); color: var(--primary); }
 .day.today { color: var(--primary); }
 .grace-note { margin-top: 14px; padding: 10px 12px; border-radius: 12px; background: var(--secondary-50); font-size: 12px; color: var(--ink-80); display: flex; gap: 8px; align-items: center; line-height: 1.4; }
-.grace-note .ico { color: var(--secondary); }
+.grace-note .ico { color: var(--secondary); flex-shrink: 0; }
+.streak-actions { display: flex; gap: 8px; margin-top: 12px; }
+.btn-gold:disabled { opacity: .5; box-shadow: none; cursor: not-allowed; }
+.grace-chip.used { background: var(--ink-05); color: var(--ink-40); border-color: var(--ink-10); }
 
 .live-card { margin: 16px 20px 0; height: 196px; cursor: pointer; }
 .live-card .bl h4 { font-size: 17px; font-weight: 700; margin: 6px 0 4px; }
