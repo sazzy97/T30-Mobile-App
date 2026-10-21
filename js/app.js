@@ -7,7 +7,9 @@
 
   const viewport = $('#viewport');
   const screens = $$('.screen');
-  const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'bible', 'discover', 'plan', 'wotd', 'profile'];
+  const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'bible', 'discover',
+    'dev-list', 'dev-read', 'conf-list', 'conf-session', 'decl-list', 'decl-session', 'plans-list', 'pray-list', 'pray-session', 'complete',
+    'plan', 'wotd', 'profile', 'streak', 'settings', 'devotions'];
   const tabbar = $('#tabbar');
   const audioBar = $('#audio-bar');
   let current = null;
@@ -44,6 +46,7 @@
     $$('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.nav === id && (!!n.dataset.sheet === sheet)));
 
     if (id === 'live') startLive(); else stopLive();
+    window.T30Sub && window.T30Sub.onEnter(id);
     if (sheet) setTimeout(() => openSheet($('.verse[data-v="16"]')), 380);
 
     location.hash = id;
@@ -58,7 +61,11 @@
     const backBtn = e.target.closest('[data-back]');
     if (backBtn) { back(); return; }
     const goEl = e.target.closest('[data-go]');
-    if (goEl) { go(goEl.dataset.go, { sheet: !!goEl.dataset.sheet }); return; }
+    if (goEl) {
+      if (goEl.dataset.done) setDone(goEl.dataset.done);
+      if (goEl.dataset.reset !== undefined) history.length = 0;
+      go(goEl.dataset.go, { sheet: !!goEl.dataset.sheet }); return;
+    }
     const tabEl = e.target.closest('[data-tabgo]');
     if (tabEl) { history.length = 0; go(tabEl.dataset.tabgo, { push: false }); return; }
     const nav = e.target.closest('[data-nav]');
@@ -260,6 +267,270 @@
   }
   window.addEventListener('resize', fit);
   fit();
+
+  /* ==========================================================
+     SUB-FEATURES
+     ========================================================== */
+  // Move in-screen sheets into the phone viewport so they overlay correctly
+  $$('.sf-sheet, .sf-sheet-bg').forEach(el => viewport.appendChild(el));
+  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'cm-sheet': 'cm-bg' };
+  function openSf(id) { $('#' + id).classList.add('open'); $('#' + sheetPairs[id]).classList.add('open'); }
+  function closeSf() { $$('.sf-sheet, .sf-sheet-bg').forEach(e => e.classList.remove('open')); }
+  Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', closeSf));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSf(); });
+
+  // Generic pill toggles inside sub-feature screens
+  $$('.sf-pills').forEach(g => g.addEventListener('click', e => {
+    const p = e.target.closest('.pill'); if (!p) return;
+    $$('.pill', g).forEach(x => x.classList.toggle('active', x === p));
+  }));
+  $$('.sf-save').forEach(b => b.addEventListener('click', () => toast('Saved to your library')));
+
+  // Completion screen
+  function setDone(title) {
+    $('#done-title').textContent = title;
+    const subs = {
+      'Devotional complete': 'You showed up for God today. That matters.',
+      'Confessions spoken': 'Faith comes by hearing, and you just spoke life over yourself.',
+      'Declarations made': 'Your words carry weight. Keep declaring His truth.',
+      'Prayer complete': 'Cast all your anxiety on Him, because He cares for you.'
+    };
+    $('#done-sub').textContent = subs[title] || 'Well done, keep the rhythm going.';
+  }
+  function confetti() {
+    const c = $('.sf-confetti'); c.innerHTML = '';
+    const cols = ['#8B1E1E', '#C9961A', '#E7C563', '#A32A2A', '#141414'];
+    for (let i = 0; i < 36; i++) {
+      const s = document.createElement('i');
+      s.style.left = Math.random() * 100 + '%';
+      s.style.background = cols[i % cols.length];
+      s.style.animationDelay = Math.random() * .6 + 's';
+      c.appendChild(s);
+    }
+  }
+
+  /* ---------- Confessions session ---------- */
+  const confessions = [
+    ['I am a new creation in Christ. The old has gone, the new has come.', '2 Corinthians 5:17'],
+    ['I am fearfully and wonderfully made.', 'Psalm 139:14'],
+    ['I am chosen, royal and holy, God’s special possession.', '1 Peter 2:9'],
+    ['I am the righteousness of God in Christ Jesus.', '2 Corinthians 5:21'],
+    ['I am loved with an everlasting love.', 'Jeremiah 31:3'],
+    ['I am more than a conqueror through Him who loves me.', 'Romans 8:37'],
+    ['I am God’s handiwork, created for good works.', 'Ephesians 2:10']
+  ];
+  let ci = 0;
+  const confSteps = $('#conf-steps');
+  confessions.forEach(() => confSteps.insertAdjacentHTML('beforeend', '<i></i>'));
+  function renderConf() {
+    const [t, r] = confessions[ci];
+    const el = $('#conf-text'); el.textContent = t; el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    $('#conf-ref').textContent = r;
+    $('#conf-count').textContent = `${ci + 1} of ${confessions.length}`;
+    $$('i', confSteps).forEach((s, i) => s.classList.toggle('on', i <= ci));
+    $('#conf-mic').classList.remove('on');
+    $('#conf-next').textContent = ci === confessions.length - 1 ? 'Finish' : 'Next confession';
+  }
+  $('#conf-mic').addEventListener('click', e => { e.currentTarget.classList.toggle('on'); });
+  $('#conf-next').addEventListener('click', () => {
+    if (ci < confessions.length - 1) { ci++; renderConf(); }
+    else { setDone('Confessions spoken'); go('complete'); }
+  });
+  $('#conf-prev').addEventListener('click', () => { if (ci > 0) { ci--; renderConf(); } });
+
+  /* ---------- Declarations session ---------- */
+  const decls = [
+    ['I am more than a conqueror through Him who loves me.', 'Romans 8:37'],
+    ['No weapon formed against me shall prosper.', 'Isaiah 54:17'],
+    ['The joy of the Lord is my strength.', 'Nehemiah 8:10'],
+    ['I can do all things through Christ who strengthens me.', 'Philippians 4:13']
+  ];
+  let di = 0, dn = 0;
+  function renderDecl() {
+    const [t, r] = decls[di];
+    $('#decl-text').textContent = t;
+    $('#decl-text').nextElementSibling.textContent = r;
+    dn = 0; updDecl();
+    $('#decl-next').textContent = di === decls.length - 1 ? 'Finish' : 'Next declaration';
+  }
+  function updDecl() {
+    $('#decl-n').textContent = `${dn}/3`;
+    $('#decl-ring').style.strokeDashoffset = 339.3 * (1 - dn / 3);
+  }
+  $('#decl-btn').addEventListener('click', e => {
+    if (dn >= 3) return;
+    dn++; updDecl();
+    const b = e.currentTarget; b.classList.remove('pulse'); b.offsetHeight; b.classList.add('pulse');
+    if (dn === 3) toast('Declared! 🔥');
+  });
+  $('#decl-next').addEventListener('click', () => {
+    if (di < decls.length - 1) { di++; renderDecl(); }
+    else { setDone('Declarations made'); go('complete'); }
+  });
+
+  /* ---------- Prayer Companion ---------- */
+  let need = 'Anxiety', mins = 5;
+  $('#pray-needs').addEventListener('click', e => {
+    const c = e.target.closest('.sf-cat'); if (!c) return;
+    $$('#pray-needs .sf-cat').forEach(x => x.classList.toggle('sel', x === c));
+    need = c.dataset.need;
+  });
+  $('#pray-len').addEventListener('click', e => { const p = e.target.closest('.pill'); if (p) mins = parseInt(p.textContent, 10); });
+  const prayScripts = {
+    Anxiety: ['You are my refuge and strength, an ever-present help. You are bigger than every worry I carry.', 'Lord, forgive me for holding on to fear instead of trusting You.', 'Thank You that Your peace guards my heart and mind in Christ Jesus.', 'Calm my racing thoughts. I cast every care on You, for You care for me.'],
+    Healing: ['You are Jehovah Rapha, the God who heals.', 'Forgive me where I have doubted Your goodness.', 'Thank You for every breath and every strength You give.', 'Touch my body and soul with Your healing power.'],
+    Family: ['You are a faithful Father to every generation.', 'Forgive me for words and attitudes that wounded those I love.', 'Thank You for the family You have placed around me.', 'Unite our home in love; protect and guide each one.'],
+    Guidance: ['You are the Good Shepherd who leads me.', 'Forgive me for leaning on my own understanding.', 'Thank You that You go before me.', 'Show me the way I should go; make my path straight.'],
+    Provision: ['You are Jehovah Jireh, my provider.', 'Forgive me for worry and comparison.', 'Thank You for daily bread and every open door.', 'Meet every need according to Your riches in glory.'],
+    Gratitude: ['You are good, and Your love endures forever.', 'Forgive me for the times I forgot to say thank You.', 'Thank You for salvation, for grace, for this very day.', 'Make my life an offering of praise.']
+  };
+  const prayRefs = ['Psalm 46:1', '1 John 1:9', 'Philippians 4:7', '1 Peter 5:7'];
+  const prayTitles = ['Adore', 'Confess', 'Thank', 'Ask'];
+  let ps = 0, prayT, remaining = 0, paused = false, breatheT;
+  function renderPray() {
+    $('#pray-title').textContent = prayTitles[ps];
+    const el = $('#pray-text'); el.textContent = prayScripts[need][ps]; el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    $('#pray-ref').textContent = prayRefs[ps];
+    $$('#pray-tabs span').forEach((s, i) => { s.classList.toggle('on', i === ps); s.classList.toggle('done', i < ps); });
+    $('#pray-next').textContent = ps === 3 ? 'Amen · Finish' : 'Next step';
+  }
+  function fmtT(s) { return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
+  function startPray() {
+    ps = 0; paused = false; remaining = mins * 60;
+    $('#pray-need').textContent = need;
+    $('[data-screen="pray-session"]').classList.remove('paused');
+    $('#pray-timer').textContent = fmtT(remaining);
+    renderPray();
+    clearInterval(prayT); clearInterval(breatheT);
+    prayT = setInterval(() => { if (!paused && remaining > 0) { remaining--; $('#pray-timer').textContent = fmtT(remaining); } }, 1000);
+    let inhale = true; $('#breathe-t').textContent = 'Breathe in';
+    breatheT = setInterval(() => { if (!paused) { inhale = !inhale; $('#breathe-t').textContent = inhale ? 'Breathe in' : 'Breathe out'; } }, 4000);
+  }
+  $('#pray-next').addEventListener('click', () => {
+    if (ps < 3) { ps++; renderPray(); }
+    else { clearInterval(prayT); clearInterval(breatheT); setDone('Prayer complete'); go('complete'); }
+  });
+  $('#pray-pause').addEventListener('click', e => {
+    paused = !paused;
+    $('[data-screen="pray-session"]').classList.toggle('paused', paused);
+    $('use', e.currentTarget).setAttribute('href', paused ? '#i-play' : '#i-pause');
+  });
+
+  /* ---------- Streak: full-year view ---------- */
+  (() => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const today = new Date(2026, 9, 21);
+    const streaks = [[2, 2, 10], [5, 3, 29], [7, 14, 31], [8, 1, 1], [9, 10, 21]]; // [month, from, to]
+    const inStreak = (m, d) => streaks.some(([sm, a, b]) => sm === m && d >= a && d <= b);
+    let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+    const wrap = $('#year-months');
+    months.forEach((name, m) => {
+      const days = new Date(2026, m + 1, 0).getDate();
+      const lead = (new Date(2026, m, 1).getDay() + 6) % 7;
+      let cells = '', count = 0;
+      for (let i = 0; i < lead; i++) cells += '<i class="x"></i>';
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(2026, m, d);
+        let cls = '';
+        if (dt > today) cls = 'f';
+        else if (inStreak(m, d)) { cls = rnd() < .07 ? 'gp' : 'c'; }
+        else { const r = rnd(); cls = r < .45 ? 'c' : r < .65 ? 'p' : ''; }
+        if (+dt === +today) cls += ' today';
+        if (cls.includes('c') || cls.includes('gp')) count++;
+        cells += `<i class="${cls}" title="${name} ${d}"></i>`;
+      }
+      wrap.insertAdjacentHTML('beforeend', `<div class="sf-month"><h5>${name.toUpperCase()}</h5><div class="g">${cells}</div><small>${m > 9 ? '—' : count + ' days'}</small></div>`);
+    });
+  })();
+  ['#btn-share-streak', '#btn-share-streak-top'].forEach(s => $(s).addEventListener('click', () => openSf('streak-sheet')));
+
+  /* ---------- Settings: library + delete account ---------- */
+  const lib = {
+    notes: { title: 'Notes', items: [['John 3:16', 'God’s love isn’t earned, it’s given. Remember this when I feel unworthy.', 'Oct 14'], ['Psalm 46:10', 'Stillness is an act of trust.', 'Oct 9'], ['1 Kings 19:12', 'God was in the whisper, not the fire.', 'Oct 3']] },
+    journals: { title: 'Journals', items: [['Morning reflection', 'Felt anxious about work today. Wrote down three things God has already provided…', 'Today 🔒'], ['When the Storm Rages', 'My “wind” this week was comparison. Fixing my eyes again.', 'Oct 15 🔒']] },
+    testimonies: { title: 'Testimonies', items: [['Mum’s recovery', 'After 3 weeks of prayer, the doctors confirmed she is fully recovered. God is faithful!', 'Oct 18 · Shared'], ['New job', 'Got the offer I prayed about for months.', 'Aug 30']] },
+    confessions: { title: 'Confessions', items: [['Identity', '“I am the righteousness of God in Christ Jesus.” 2 Cor 5:21', 'Spoken 32×'], ['Healing', '“By His stripes I am healed.” Isaiah 53:5', 'Spoken 14×']] }
+  };
+  let curLib = null;
+  function renderLib(k) {
+    curLib = k;
+    $('#lib-title').textContent = lib[k].title;
+    $('#lib-items').innerHTML = lib[k].items.map(([t, p, d], i) =>
+      `<div class="sf-lib-item"><div><b>${t}</b><p>${p}</p><small>${d}</small></div><button aria-label="Delete" data-del="${i}"><svg class="ico sm"><use href="#i-x"/></svg></button></div>`).join('');
+  }
+  $$('.sf-lib .list-row').forEach(r => r.addEventListener('click', () => {
+    const k = r.dataset.lib, panel = $('#lib-panel');
+    const same = curLib === k && panel.classList.contains('open');
+    $$('.sf-lib .list-row').forEach(x => x.classList.toggle('on', x === r && !same));
+    panel.classList.toggle('open', !same);
+    if (!same) renderLib(k);
+  }));
+  $('#lib-items').addEventListener('click', e => {
+    const b = e.target.closest('[data-del]'); if (!b) return;
+    lib[curLib].items.splice(+b.dataset.del, 1); renderLib(curLib); toast('Deleted');
+  });
+  $('#lib-add').addEventListener('click', () => {
+    const label = { notes: 'New note', journals: 'New journal entry', testimonies: 'New testimony', confessions: 'New confession' }[curLib];
+    lib[curLib].items.unshift([label, 'Tap to start writing…', 'Just now']); renderLib(curLib);
+  });
+  $('#btn-delete-acct').addEventListener('click', () => { $('#del-input').value = ''; $('#del-confirm').disabled = true; openSf('del-sheet'); });
+  $('#del-input').addEventListener('input', e => { $('#del-confirm').disabled = e.target.value.trim().toUpperCase() !== 'DELETE'; });
+  $('#del-cancel').addEventListener('click', closeSf);
+  $('#del-confirm').addEventListener('click', () => { closeSf(); toast('Account deleted'); history.length = 0; setTimeout(() => go('splash', { push: false }), 900); });
+
+  /* ---------- Devotions community feed ---------- */
+  const posts = [
+    { n: 'Joshua Okon', i: 'JO', c: '#8B1E1E', t: '2h · Lagos', title: 'Fixing my eyes again', body: 'Today’s devotional hit home. I’ve been looking at the waves (bills, deadlines) instead of Jesus. Choosing faith over fear today.', ref: 'Matthew 14:31', img: 'assets/water_walk.jpg', likes: 48, cm: [['Ada M.', 'Amen! Needed this today 🙏', '1h'], ['Tunde', 'Praying with you brother.', '45m']] },
+    { n: 'Amara Eze', i: 'AM', c: '#C9961A', t: '5h · Abuja', title: 'The still small voice', body: 'God wasn’t in the earthquake or the fire, but in the whisper. Learning to quiet my heart in the mornings before I reach for my phone.', ref: '1 Kings 19:12', likes: 112, cm: [['Grace A.', 'This is so beautiful.', '3h']] },
+    { n: 'Pastor Ade', i: 'PA', c: '#141414', t: 'Yesterday', title: 'New mercies', body: 'Whatever yesterday held, His mercies are new this morning. Let’s walk in that freshness together.', ref: 'Lamentations 3:23', img: 'assets/splash_hero.jpg', likes: 304, cm: [] }
+  ];
+  let curPost = null;
+  function renderFeed() {
+    $('#dev-feed').innerHTML = posts.map((p, k) => `
+      <article class="sf-post">
+        <div class="sf-post-h"><span class="sf-av" style="background:${p.c}">${p.i}</span><div><b>${p.n}</b><span>${p.t}</span></div><button class="icon-btn" style="box-shadow:none;background:none" aria-label="More" data-toast="Report · Mute · Save"><svg class="ico sm"><use href="#i-more"/></svg></button></div>
+        ${p.img ? `<img class="cover" src="${p.img}" alt="">` : ''}
+        <div class="sf-post-b"><h4>${p.title}</h4><p>${p.body}</p><span class="ref">${p.ref}</span></div>
+        <div class="sf-post-a">
+          <button data-like="${k}" class="${p.liked ? 'on' : ''}"><svg class="ico sm"><use href="#i-heart"/></svg>${p.likes}</button>
+          <button data-cm="${k}"><svg class="ico sm"><use href="#i-message"/></svg>${p.cm.length}</button>
+          <button data-share="${k}"><svg class="ico sm"><use href="#i-share"/></svg>Share</button>
+        </div>
+      </article>`).join('');
+  }
+  function renderComments() {
+    const p = posts[curPost];
+    $('#cm-count').textContent = p.cm.length;
+    $('#cm-list').innerHTML = p.cm.length ? p.cm.map(([n, t, d]) =>
+      `<div class="sf-cm"><span class="sf-av" style="background:${n.startsWith('You') ? '#C9961A' : '#8B1E1E'}">${n.split(' ').map(w => w[0]).join('').slice(0, 2)}</span><div><b>${n}</b> <small>${d}</small><p>${t}</p></div></div>`).join('')
+      : '<p class="t-sm muted" style="text-align:center;margin-top:30px">Be the first to encourage.</p>';
+    $('#cm-list').scrollTop = 1e5;
+  }
+  $('#dev-feed').addEventListener('click', e => {
+    const l = e.target.closest('[data-like]'), c = e.target.closest('[data-cm]'), s = e.target.closest('[data-share]');
+    if (l) { const p = posts[+l.dataset.like]; p.liked = !p.liked; p.likes += p.liked ? 1 : -1; renderFeed(); }
+    if (c) { curPost = +c.dataset.cm; renderComments(); openSf('cm-sheet'); }
+    if (s) { openSf('streak-sheet'); $('#streak-sheet h3').textContent = 'Share this devotion'; }
+  });
+  $('#cm-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = $('#cm-text').value.trim(); if (!v) return;
+    posts[curPost].cm.push(['You', v, 'now']); $('#cm-text').value = '';
+    renderComments(); renderFeed();
+  });
+  renderFeed();
+
+  /* ---------- Screen enter hooks ---------- */
+  window.T30Sub = {
+    onEnter(id) {
+      closeSf();
+      if (id === 'conf-session') { ci = 0; renderConf(); }
+      if (id === 'decl-session') { di = 0; renderDecl(); }
+      if (id === 'pray-session') startPray(); else { clearInterval(prayT); clearInterval(breatheT); }
+      if (id === 'complete') confetti();
+      if (id === 'streak') $('#streak-sheet h3').textContent = 'Share your streak';
+    }
+  };
 
   /* ---------- Init ---------- */
   const start = location.hash.slice(1);

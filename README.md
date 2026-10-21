@@ -44,6 +44,22 @@ T30 helps believers build a consistent devotional habit. This repository contain
 
 Plus overlays: tab bar, mini audio player, verse sheet and toast notifications.
 
+### Discover hub sub-feature flows
+| Flow | Screens | Highlights |
+|------|---------|-----------|
+| Devotionals | `dev-list` → `dev-read` → `complete` | Themes, continue reading, scripture callout, reflection journal, prayer |
+| Confessions | `conf-list` → `conf-session` → `complete` | Topic sets, step progress, "spoken aloud" mic, prev/next |
+| Declarations | `decl-list` → `decl-session` → `complete` | Daily declaration, decks, tap-3× progress ring, share |
+| Bible Plans | `plans-list` → `plan` → `bible` | Active plans with progress, recommendations, filter by length |
+| Prayer Companion | `pray-list` → `pray-session` → `complete` | Pick a need and length, ACTS steps, breathing animation, timer, pause |
+
+### Profile extensions
+| Screen | ID | Highlights |
+|--------|----|-----------|
+| Yearly streak | `streak` | 12-month calendar, stats, streak history, milestones, share sheet |
+| Settings | `settings` | Library of Notes, Journals, Testimonies & Confessions (add/delete); preferences; data export; account deletion with type-to-confirm |
+| Devotions community | `devotions` | Feed of devotions with likes, comment thread sheet and share |
+
 ---
 
 ## 🎨 Design System
