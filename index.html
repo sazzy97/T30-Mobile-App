@@ -107,7 +107,7 @@
       <div class="nav-group">
         <h4>Discover · Sub-features</h4>
         <button class="nav-link" data-nav="dev-list"><span class="num">D1</span>Devotionals Library</button>
-        <button class="nav-link" data-nav="dev-read"><span class="num">D2</span>Devotional Reader</button>
+        <button class="nav-link" data-nav="dev-read"><span class="num">D2</span>Devotional + Comments</button>
         <button class="nav-link" data-nav="conf-list"><span class="num">C1</span>Confessions</button>
         <button class="nav-link" data-nav="conf-session"><span class="num">C2</span>Confession Session</button>
         <button class="nav-link" data-nav="decl-list"><span class="num">E1</span>Declarations</button>
@@ -122,7 +122,6 @@
         <button class="nav-link" data-nav="profile"><span class="num">14</span>Profile &amp; Growth</button>
         <button class="nav-link" data-nav="streak"><span class="num">15</span>Yearly Streak &amp; Share</button>
         <button class="nav-link" data-nav="settings"><span class="num">16</span>Settings &amp; Library</button>
-        <button class="nav-link" data-nav="devotions"><span class="num">17</span>Devotions Community</button>
       </div>
     </nav>
   </aside>
@@ -462,13 +461,6 @@
               <button class="sf-hub-i" id="hub-plans" data-go="plans-list"><span class="g"><svg class="ico"><use href="#i-calendar"/></svg></span>Plans</button>
               <button class="sf-hub-i" id="hub-pray" data-go="pray-list"><span class="d"><svg class="ico"><use href="#i-pray"/></svg></span>Prayer</button>
             </div>
-            <div class="pad" style="margin-top:14px">
-              <div class="card sf-row sf-community" data-go="devotions" id="card-community">
-                <span class="sf-avs"><img src="assets/avatar_user.jpg" alt=""><i>JO</i><i class="g">AM</i></span>
-                <div class="sf-row-t"><b>Devotions Community</b><span>128 new reflections today · join the conversation</span></div>
-                <svg class="ico sm muted"><use href="#i-right"/></svg>
-              </div>
-            </div>
 
             <div class="section-head"><h3 class="h-lg">Crafted for you</h3></div>
             <div class="hscroll" id="hero-scroll">
@@ -526,7 +518,7 @@
             </div></div>
 
             <div class="pad" style="margin-top:18px">
-              <div class="img-card sf-feature" data-go="dev-read">
+              <div class="img-card sf-feature" data-go="dev-read" data-dev="storm">
                 <img src="assets/water_walk.jpg" alt="When the Storm Rages"><div class="shade"></div>
                 <div class="tl"><span class="badge badge-new">TODAY</span></div>
                 <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-clock"/></svg>6 min</span></div>
@@ -535,7 +527,7 @@
             </div>
 
             <div class="section-head"><h3 class="h-lg">Continue reading</h3></div>
-            <div class="pad"><div class="card sf-row" data-go="dev-read">
+            <div class="pad"><div class="card sf-row" data-go="dev-read" data-dev="cave">
               <img src="assets/cave_light.jpg" alt="">
               <div class="sf-row-t"><b>Light in the Cave</b><span>Elijah's restoration · 3 min left</span><div class="sf-bar"><i style="width:62%"></i></div></div>
               <span class="sf-play"><svg class="ico sm"><use href="#i-play"/></svg></span>
@@ -553,9 +545,9 @@
 
             <div class="section-head"><h3 class="h-lg">This week</h3><a>See all</a></div>
             <div class="pad sf-list">
-              <div class="card sf-row" data-go="dev-read"><img src="assets/prayer_bible.jpg" alt=""><div class="sf-row-t"><b>The Quiet Place</b><span>Learning stillness · 5 min</span></div><svg class="ico sm muted"><use href="#i-headphones"/></svg></div>
-              <div class="card sf-row" data-go="dev-read"><img src="assets/candle_peace.jpg" alt=""><div class="sf-row-t"><b>Peace that Guards</b><span>Philippians 4 · 7 min</span></div><svg class="ico sm muted"><use href="#i-bookmark"/></svg></div>
-              <div class="card sf-row" data-go="dev-read"><img src="assets/wheat_sunrise.jpg" alt=""><div class="sf-row-t"><b>Seasons of Harvest</b><span>Galatians 6:9 · 6 min</span></div><svg class="ico sm muted"><use href="#i-bookmark"/></svg></div>
+              <div class="card sf-row" data-go="dev-read" data-dev="quiet"><img src="assets/prayer_bible.jpg" alt=""><div class="sf-row-t"><b>The Quiet Place</b><span>Learning stillness · 5 min</span></div><svg class="ico sm muted"><use href="#i-headphones"/></svg></div>
+              <div class="card sf-row" data-go="dev-read" data-dev="peace"><img src="assets/candle_peace.jpg" alt=""><div class="sf-row-t"><b>Peace that Guards</b><span>Philippians 4 · 7 min</span></div><svg class="ico sm muted"><use href="#i-bookmark"/></svg></div>
+              <div class="card sf-row" data-go="dev-read" data-dev="harvest"><img src="assets/wheat_sunrise.jpg" alt=""><div class="sf-row-t"><b>Seasons of Harvest</b><span>Galatians 6:9 · 6 min</span></div><svg class="ico sm muted"><use href="#i-bookmark"/></svg></div>
             </div>
             <div style="height:30px"></div>
           </section>
@@ -563,7 +555,7 @@
           <!-- ==================== 11b. DEVOTIONAL READER ==================== -->
           <section class="screen" data-screen="dev-read" data-dark="1">
             <div class="plan-hero sf-hero-sm">
-              <img src="assets/water_walk.jpg" alt="When the Storm Rages">
+              <img id="dr-hero" src="assets/water_walk.jpg" alt="When the Storm Rages">
               <div class="top">
                 <button class="icon-btn glass" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
                 <div style="display:flex;gap:8px">
@@ -575,14 +567,16 @@
             </div>
             <article class="plan-body sf-article">
               <span class="badge badge-goldsoft">DEVOTIONAL · 6 MIN READ</span>
-              <h1 class="h-display" style="margin-top:10px">When the Storm Rages</h1>
-              <p class="t-sm muted" style="margin-top:6px">By Pastor Ade Okafor · Oct 15</p>
+              <h1 class="h-display" id="dr-title" style="margin-top:10px">When the Storm Rages</h1>
+              <p class="t-sm muted" id="dr-by" style="margin-top:6px">By Pastor Ade Okafor · Oct 15</p>
+              <button class="dr-jump" id="dr-jump" type="button"><svg class="ico sm"><use href="#i-message"/></svg><span id="dr-jump-t">0 comments</span><svg class="ico sm"><use href="#i-down"/></svg></button>
 
-              <blockquote class="sf-scripture">
+              <blockquote class="sf-scripture" id="dr-quote">
                 “Immediately Jesus reached out his hand and caught him. ‘You of little faith,’ he said, ‘why did you doubt?’”
                 <cite>Matthew 14:31 · NIV</cite>
               </blockquote>
 
+              <div id="dr-body">
               <p>Peter didn’t sink because the storm got stronger. He sank because his eyes moved. The wind had been howling the whole time, yet while he looked at Jesus, the water held him.</p>
               <p>Your storm may be real: a diagnosis, a bill, a silence from someone you love. But the same hand that caught Peter is close enough to catch you. Faith isn’t the absence of wind; it’s where you fix your eyes in it.</p>
 
@@ -596,6 +590,23 @@
                 <span class="sf-callout-i"><svg class="ico sm"><use href="#i-pray"/></svg></span>
                 <div><b>Pray</b><p>Lord, when the waves rise, lift my eyes back to You. Reach out Your hand and steady me. Amen.</p></div>
               </div>
+              </div>
+
+              <!-- Comments for THIS devotional -->
+              <section class="dr-comments" id="dr-comments" aria-label="Comments">
+                <div class="dr-ch">
+                  <h3 class="h-lg">Comments <span class="dr-n" id="dr-n">0</span></h3>
+                  <div class="dr-sort" id="dr-sort"><button class="on" data-sort="top">Top</button><button data-sort="new">Newest</button><button data-sort="mine">Mine</button></div>
+                </div>
+                <form class="dr-form" id="dr-form">
+                  <img src="assets/avatar_user.jpg" alt="You">
+                  <div>
+                    <textarea id="dr-text" rows="2" placeholder="Share what this devotional stirred in you…" aria-label="Write a comment"></textarea>
+                    <div class="dr-form-f"><span>Be kind and encouraging 💛</span><button class="btn btn-primary btn-sm" id="dr-post" disabled>Post</button></div>
+                  </div>
+                </form>
+                <div id="dr-list"></div>
+              </section>
               <div style="height:110px"></div>
             </article>
             <div class="sticky-cta" style="position:sticky;margin-top:-100px"><button class="btn btn-primary" data-go="complete" data-done="Devotional complete">Mark as complete <svg class="ico sm"><use href="#i-check"/></svg></button></div>
@@ -1004,25 +1015,6 @@
             </div>
           </section>
 
-          <!-- ==================== 17. DEVOTIONS FEED ==================== -->
-          <section class="screen" data-screen="devotions">
-            <div class="top-bar">
-              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
-              <h3>Devotions</h3>
-              <button class="icon-btn" aria-label="Post" data-toast="Share a devotion with your community"><svg class="ico"><use href="#i-plus"/></svg></button>
-            </div>
-            <div class="pad"><div class="pills sf-pills"><button class="pill active">All</button><button class="pill">Following</button><button class="pill">My church</button><button class="pill">Saved</button></div></div>
-            <div class="pad sf-feed" id="dev-feed"></div>
-            <div style="height:30px"></div>
-
-            <div class="sf-sheet-bg" id="cm-bg"></div>
-            <div class="sf-sheet tall" id="cm-sheet">
-              <div class="grab"></div>
-              <h3 class="h-lg"><span id="cm-count">0</span> comments</h3>
-              <div class="sf-comments" id="cm-list"></div>
-              <form class="sf-cm-input" id="cm-form"><img src="assets/avatar_user.jpg" alt=""><input id="cm-text" placeholder="Add an encouraging word…" autocomplete="off"><button aria-label="Send"><svg class="ico sm"><use href="#i-right"/></svg></button></form>
-            </div>
-          </section>
 
           <!-- ==================== 14. PROFILE ==================== -->
           <section class="screen with-tabs" data-screen="profile" data-tab="profile">

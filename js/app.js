@@ -9,7 +9,7 @@
   const screens = $$('.screen');
   const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'bible', 'discover',
     'dev-list', 'dev-read', 'conf-list', 'conf-session', 'decl-list', 'decl-session', 'plans-list', 'pray-list', 'pray-session', 'complete',
-    'plan', 'wotd', 'profile', 'streak', 'settings', 'devotions'];
+    'plan', 'wotd', 'profile', 'streak', 'settings'];
   const tabbar = $('#tabbar');
   const audioBar = $('#audio-bar');
   let current = null;
@@ -62,6 +62,7 @@
     if (backBtn) { back(); return; }
     const goEl = e.target.closest('[data-go]');
     if (goEl) {
+      if (goEl.dataset.dev) setDev(goEl.dataset.dev);
       if (goEl.dataset.done) setDone(goEl.dataset.done);
       if (goEl.dataset.reset !== undefined) history.length = 0;
       go(goEl.dataset.go, { sheet: !!goEl.dataset.sheet }); return;
@@ -272,7 +273,7 @@
      ========================================================== */
   // Move in-screen sheets into the phone viewport so they overlay correctly
   $$('.sf-sheet, .sf-sheet-bg').forEach(el => viewport.appendChild(el));
-  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'cm-sheet': 'cm-bg', 'grace-sheet': 'grace-sheet-bg' };
+  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'grace-sheet': 'grace-sheet-bg' };
   function openSf(id) { $('#' + id).classList.add('open'); $('#' + sheetPairs[id]).classList.add('open'); }
   function closeSf() { $$('.sf-sheet, .sf-sheet-bg').forEach(e => e.classList.remove('open')); }
   Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', closeSf));
@@ -502,47 +503,140 @@
   $('#del-cancel').addEventListener('click', closeSf);
   $('#del-confirm').addEventListener('click', () => { closeSf(); toast('Account deleted'); history.length = 0; setTimeout(() => go('splash', { push: false }), 900); });
 
-  /* ---------- Devotions community feed ---------- */
-  const posts = [
-    { n: 'Joshua Okon', i: 'JO', c: '#8B1E1E', t: '2h · Lagos', title: 'Fixing my eyes again', body: 'Today’s devotional hit home. I’ve been looking at the waves (bills, deadlines) instead of Jesus. Choosing faith over fear today.', ref: 'Matthew 14:31', img: 'assets/water_walk.jpg', likes: 48, cm: [['Ada M.', 'Amen! Needed this today 🙏', '1h'], ['Tunde', 'Praying with you brother.', '45m']] },
-    { n: 'Amara Eze', i: 'AM', c: '#C9961A', t: '5h · Abuja', title: 'The still small voice', body: 'God wasn’t in the earthquake or the fire, but in the whisper. Learning to quiet my heart in the mornings before I reach for my phone.', ref: '1 Kings 19:12', likes: 112, cm: [['Grace A.', 'This is so beautiful.', '3h']] },
-    { n: 'Pastor Ade', i: 'PA', c: '#141414', t: 'Yesterday', title: 'New mercies', body: 'Whatever yesterday held, His mercies are new this morning. Let’s walk in that freshness together.', ref: 'Lamentations 3:23', img: 'assets/splash_hero.jpg', likes: 304, cm: [] }
-  ];
-  let curPost = null;
-  function renderFeed() {
-    $('#dev-feed').innerHTML = posts.map((p, k) => `
-      <article class="sf-post">
-        <div class="sf-post-h"><span class="sf-av" style="background:${p.c}">${p.i}</span><div><b>${p.n}</b><span>${p.t}</span></div><button class="icon-btn" style="box-shadow:none;background:none" aria-label="More" data-toast="Report · Mute · Save"><svg class="ico sm"><use href="#i-more"/></svg></button></div>
-        ${p.img ? `<img class="cover" src="${p.img}" alt="">` : ''}
-        <div class="sf-post-b"><h4>${p.title}</h4><p>${p.body}</p><span class="ref">${p.ref}</span></div>
-        <div class="sf-post-a">
-          <button data-like="${k}" class="${p.liked ? 'on' : ''}"><svg class="ico sm"><use href="#i-heart"/></svg>${p.likes}</button>
-          <button data-cm="${k}"><svg class="ico sm"><use href="#i-message"/></svg>${p.cm.length}</button>
-          <button data-share="${k}"><svg class="ico sm"><use href="#i-share"/></svg>Share</button>
+  /* ---------- Devotionals: content + comments (per devotional) ---------- */
+  const devs = {
+    storm: { title: 'When the Storm Rages', img: 'assets/water_walk.jpg', by: 'By Pastor Ade Okafor · Oct 15', min: 6,
+      quote: ['Immediately Jesus reached out his hand and caught him. \u2018You of little faith,\u2019 he said, \u2018why did you doubt?\u2019', 'Matthew 14:31 \u00b7 NIV'],
+      body: ['Peter didn\u2019t sink because the storm got stronger. He sank because his eyes moved. The wind had been howling the whole time, yet while he looked at Jesus, the water held him.', 'Your storm may be real: a diagnosis, a bill, a silence from someone you love. But the same hand that caught Peter is close enough to catch you. Faith isn\u2019t the absence of wind; it\u2019s where you fix your eyes in it.'],
+      reflect: 'What is one \u201cwind\u201d that has pulled your eyes away from Jesus this week?', pray: 'Lord, when the waves rise, lift my eyes back to You. Reach out Your hand and steady me. Amen.' },
+    cave: { title: 'Light in the Cave', img: 'assets/cave_light.jpg', by: 'By Sister Ruth Bello · Oct 12', min: 8,
+      quote: ['And after the fire came a gentle whisper.', '1 Kings 19:12 \u00b7 NIV'],
+      body: ['Elijah ran from victory straight into a cave. Exhausted and afraid, he wanted to quit. God didn\u2019t scold him. He fed him, let him rest, and then met him in a whisper.', 'Sometimes restoration doesn\u2019t arrive with fire or thunder. It comes quietly, in rest, in a meal, in a still small voice that says, \u201cI am still here.\u201d'],
+      reflect: 'Where do you need God\u2019s gentle restoration instead of another push?', pray: 'Father, I am tired. Meet me in the quiet and restore my strength. Amen.' },
+    quiet: { title: 'The Quiet Place', img: 'assets/prayer_bible.jpg', by: 'By Pastor Ade Okafor \u00b7 Oct 10', min: 5,
+      quote: ['Be still, and know that I am God.', 'Psalm 46:10 \u00b7 NIV'],
+      body: ['Stillness is not laziness. It is trust in motion. When we stop striving, we make room to remember who is actually holding the world together.', 'Try five minutes today with no phone and no list. Just breathe, and let Scripture settle over you.'],
+      reflect: 'What would five quiet minutes with God change about your day?', pray: 'Lord, quiet my heart. Teach me to be still in Your presence. Amen.' },
+    peace: { title: 'Peace that Guards', img: 'assets/candle_peace.jpg', by: 'By Deaconess Ngozi Eze \u00b7 Oct 8', min: 7,
+      quote: ['And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.', 'Philippians 4:7 \u00b7 NIV'],
+      body: ['Notice the word guard. God\u2019s peace stands at the door of your mind like a sentry, not removing the anxious thought, but refusing it a permanent home.', 'The path to that peace begins with prayer, with thanksgiving, and with handing over each worry by name.'],
+      reflect: 'Which worry do you need to hand over by name tonight?', pray: 'Jesus, I give You my worries. Guard my heart and mind with Your peace. Amen.' },
+    harvest: { title: 'Seasons of Harvest', img: 'assets/wheat_sunrise.jpg', by: 'By Pastor James Adu \u00b7 Oct 5', min: 6,
+      quote: ['Let us not become weary in doing good, for at the proper time we will reap a harvest if we do not give up.', 'Galatians 6:9 \u00b7 NIV'],
+      body: ['Every farmer knows the waiting. Seed goes into the ground and, for a long while, nothing seems to happen. But growth is happening where you cannot see it.', 'If you are in a season of sowing, keep going. Your harvest has a proper time.'],
+      reflect: 'What seed are you tempted to stop sowing, and why keep going?', pray: 'Lord, give me patience in the waiting and faith for the harvest. Amen.' }
+  };
+  const seedComments = {
+    storm: [
+      { n: 'Joshua Okon', i: 'JO', c: '#8B1E1E', t: '2h', text: 'Today\u2019s devotional hit home. I\u2019ve been looking at the waves (bills, deadlines) instead of Jesus. Choosing faith over fear today.', likes: 48, replies: [{ n: 'Ada Mbah', i: 'AM', c: '#C9961A', t: '1h', text: 'Amen! Praying with you, brother \ud83d\ude4f' }] },
+      { n: 'Amara Eze', i: 'AE', c: '#C9961A', t: '5h', text: 'Fixing my eyes on Jesus, not the wind. This is exactly what I needed this morning.', likes: 112, replies: [] },
+      { n: 'Pastor Ade', i: 'PA', c: '#141414', t: '1d', text: 'Beloved, whatever storm you are in, He is close enough to catch you. Keep your eyes on Him.', likes: 304, replies: [] }
+    ],
+    cave: [
+      { n: 'Ruth Bello', i: 'RB', c: '#8B1E1E', t: '3h', text: 'The whisper after the fire. I needed to hear that God isn\u2019t angry at my exhaustion.', likes: 76, replies: [] },
+      { n: 'Tunde Alabi', i: 'TA', c: '#141414', t: '1d', text: 'Rest is also obedience. Thank you for this.', likes: 31, replies: [] }
+    ],
+    quiet: [{ n: 'Grace Nwosu', i: 'GN', c: '#C9961A', t: '6h', text: 'Five minutes with no phone was harder than I expected, but so worth it.', likes: 22, replies: [] }],
+    peace: [
+      { n: 'Ngozi Eze', i: 'NE', c: '#8B1E1E', t: '4h', text: '\u201cGuard\u201d is such a powerful word. Peace as a sentry at the door of my mind.', likes: 58, replies: [] },
+      { n: 'David Ojo', i: 'DO', c: '#141414', t: '2d', text: 'Handing over worries by name. I am doing this tonight.', likes: 19, replies: [] }
+    ],
+    harvest: []
+  };
+  const comments = {};
+  Object.keys(devs).forEach(k => comments[k] = seedComments[k].map((c, x) => ({ ...c, id: k + x, liked: false, mine: false })));
+  let curDev = 'storm', cmSort = 'top', replyTo = null, uid = 100;
+  const esc = s => s.replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+  const initials = n => n.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  const countAll = k => comments[k].reduce((s, c) => s + 1 + c.replies.length, 0);
+
+  function setDev(k) { if (devs[k]) { curDev = k; cmSort = 'top'; replyTo = null; renderDev(); } }
+  function renderDev() {
+    const d = devs[curDev];
+    $('#dr-hero').src = d.img;
+    $('#dr-title').textContent = d.title;
+    $('#dr-by').textContent = d.by;
+    $('#dr-quote').innerHTML = `\u201c${esc(d.quote[0])}\u201d<cite>${esc(d.quote[1])}</cite>`;
+    $('#dr-body').innerHTML = `
+      ${d.body.map(p => `<p>${esc(p)}</p>`).join('')}
+      <div class="sf-callout"><span class="sf-callout-i"><svg class="ico sm"><use href="#i-feather"/></svg></span><div><b>Reflect</b><p>${esc(d.reflect)}</p></div></div>
+      <textarea class="sf-journal" placeholder="Write your reflection\u2026" aria-label="Reflection"></textarea>
+      <div class="sf-callout gold"><span class="sf-callout-i"><svg class="ico sm"><use href="#i-pray"/></svg></span><div><b>Pray</b><p>${esc(d.pray)}</p></div></div>`;
+    $$('#dr-sort button').forEach(b => b.classList.toggle('on', b.dataset.sort === cmSort));
+    $('#dr-text').value = ''; $('#dr-post').disabled = true;
+    renderComments();
+    $('[data-screen="dev-read"]').scrollTop = 0;
+  }
+  function cmHTML(c, isReply) {
+    return `<div class="dr-cm ${isReply ? 'reply' : ''}" data-id="${c.id}">
+      <span class="sf-av" style="background:${c.c}">${c.i}</span>
+      <div class="dr-cm-b">
+        <div class="dr-cm-h"><b>${esc(c.n)}</b>${c.mine ? '<em>You</em>' : ''}<small>${c.t}</small></div>
+        <p>${esc(c.text)}</p>
+        <div class="dr-cm-a">
+          ${isReply ? '' : `<button data-act="like" class="${c.liked ? 'on' : ''}"><svg class="ico xs"><use href="#i-heart"/></svg>${c.likes}</button>
+          <button data-act="reply"><svg class="ico xs"><use href="#i-message"/></svg>Reply</button>`}
+          ${c.mine ? '<button data-act="del" class="del">Delete</button>' : ''}
         </div>
-      </article>`).join('');
+        ${!isReply && replyTo === c.id ? `<form class="dr-reply" data-reply="${c.id}"><input placeholder="Reply to ${esc(c.n.split(' ')[0])}\u2026" autocomplete="off" autofocus><button aria-label="Send reply"><svg class="ico sm"><use href="#i-right"/></svg></button></form>` : ''}
+        ${!isReply && c.replies.length ? `<div class="dr-replies">${c.replies.map(r => cmHTML({ ...r, id: r.id || '' }, true)).join('')}</div>` : ''}
+      </div></div>`;
   }
   function renderComments() {
-    const p = posts[curPost];
-    $('#cm-count').textContent = p.cm.length;
-    $('#cm-list').innerHTML = p.cm.length ? p.cm.map(([n, t, d]) =>
-      `<div class="sf-cm"><span class="sf-av" style="background:${n.startsWith('You') ? '#C9961A' : '#8B1E1E'}">${n.split(' ').map(w => w[0]).join('').slice(0, 2)}</span><div><b>${n}</b> <small>${d}</small><p>${t}</p></div></div>`).join('')
-      : '<p class="t-sm muted" style="text-align:center;margin-top:30px">Be the first to encourage.</p>';
-    $('#cm-list').scrollTop = 1e5;
+    let list = comments[curDev].slice();
+    if (cmSort === 'top') list.sort((a, b) => b.likes - a.likes);
+    if (cmSort === 'new') list.reverse();
+    if (cmSort === 'mine') list = list.filter(c => c.mine || c.replies.some(r => r.mine));
+    const total = countAll(curDev);
+    $('#dr-n').textContent = total;
+    $('#dr-jump-t').textContent = `${total} comment${total === 1 ? '' : 's'}`;
+    $('#dr-list').innerHTML = list.length ? list.map(c => cmHTML(c)).join('')
+      : `<div class="dr-empty"><svg class="ico lg"><use href="#i-message"/></svg><b>${cmSort === 'mine' ? 'You haven\u2019t commented yet' : 'No comments yet'}</b><span>${cmSort === 'mine' ? 'Share your thoughts above.' : 'Be the first to encourage someone on this devotional.'}</span></div>`;
+    refreshCounts();
   }
-  $('#dev-feed').addEventListener('click', e => {
-    const l = e.target.closest('[data-like]'), c = e.target.closest('[data-cm]'), s = e.target.closest('[data-share]');
-    if (l) { const p = posts[+l.dataset.like]; p.liked = !p.liked; p.likes += p.liked ? 1 : -1; renderFeed(); }
-    if (c) { curPost = +c.dataset.cm; renderComments(); openSf('cm-sheet'); }
-    if (s) { openSf('streak-sheet'); $('#streak-sheet h3').textContent = 'Share this devotion'; }
-  });
-  $('#cm-form').addEventListener('submit', e => {
+  function refreshCounts() {
+    $$('[data-dev]').forEach(el => {
+      const k = el.dataset.dev; if (!comments[k]) return;
+      let b = $('.sf-cc', el);
+      if (!b) { b = document.createElement('span'); b.className = 'sf-cc'; (el.matches('.sf-feature') ? $('.meta', el) : $('.sf-row-t', el)).appendChild(b); }
+      b.innerHTML = `<svg class="ico xs"><use href="#i-message"/></svg>${countAll(k)} comments`;
+    });
+  }
+  $('#dr-text').addEventListener('input', e => { $('#dr-post').disabled = !e.target.value.trim(); });
+  $('#dr-form').addEventListener('submit', e => {
     e.preventDefault();
-    const v = $('#cm-text').value.trim(); if (!v) return;
-    posts[curPost].cm.push(['You', v, 'now']); $('#cm-text').value = '';
-    renderComments(); renderFeed();
+    const v = $('#dr-text').value.trim(); if (!v) return;
+    comments[curDev].push({ id: 'u' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#C9961A', t: 'now', text: v, likes: 0, liked: false, mine: true, replies: [] });
+    $('#dr-text').value = ''; $('#dr-post').disabled = true;
+    cmSort = 'new'; $$('#dr-sort button').forEach(b => b.classList.toggle('on', b.dataset.sort === 'new'));
+    renderComments(); toast('Comment posted');
   });
-  renderFeed();
+  $('#dr-sort').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    cmSort = b.dataset.sort; $$('#dr-sort button').forEach(x => x.classList.toggle('on', x === b)); renderComments();
+  });
+  $('#dr-jump').addEventListener('click', () => $('#dr-comments').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  $('#dr-list').addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const wrap = btn.closest('.dr-cm'), id = wrap.dataset.id;
+    const parent = comments[curDev].find(c => c.id === id);
+    if (btn.dataset.act === 'like' && parent) { parent.liked = !parent.liked; parent.likes += parent.liked ? 1 : -1; renderComments(); }
+    if (btn.dataset.act === 'reply') { replyTo = replyTo === id ? null : id; renderComments(); const i = $('.dr-reply input'); i && i.focus(); }
+    if (btn.dataset.act === 'del') {
+      if (parent) comments[curDev] = comments[curDev].filter(c => c.id !== id);
+      else comments[curDev].forEach(c => { c.replies = c.replies.filter(r => r.id !== id); });
+      renderComments(); toast('Comment deleted');
+    }
+  });
+  $('#dr-list').addEventListener('submit', e => {
+    const f = e.target.closest('.dr-reply'); if (!f) return;
+    e.preventDefault();
+    const v = $('input', f).value.trim(); if (!v) return;
+    const p = comments[curDev].find(c => c.id === f.dataset.reply);
+    p.replies.push({ id: 'r' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#C9961A', t: 'now', text: v, mine: true });
+    replyTo = null; renderComments();
+  });
+  renderDev();
 
   /* ---------- Screen enter hooks ---------- */
   window.T30Sub = {
