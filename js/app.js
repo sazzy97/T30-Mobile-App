@@ -283,7 +283,7 @@
   }
   function confetti() {
     const c = $('.sf-confetti'); c.innerHTML = '';
-    const cols = ['#8B1E1E', '#C9961A', '#E7C563', '#A32A2A', '#141414'];
+    const cols = ['#B20000', '#EEB931', '#F5D26B', '#CC1A1A', '#141414'];
     for (let i = 0; i < 36; i++) {
       const s = document.createElement('i');
       s.style.left = Math.random() * 100 + '%';
@@ -485,17 +485,17 @@
   };
   const seedComments = {
     storm: [
-      { n: 'Joshua Okon', i: 'JO', c: '#8B1E1E', t: '2h', text: 'Today\u2019s devotional hit home. I\u2019ve been looking at the waves (bills, deadlines) instead of Jesus. Choosing faith over fear today.', likes: 48, replies: [{ n: 'Ada Mbah', i: 'AM', c: '#C9961A', t: '1h', text: 'Amen! Praying with you, brother \ud83d\ude4f' }] },
-      { n: 'Amara Eze', i: 'AE', c: '#C9961A', t: '5h', text: 'Fixing my eyes on Jesus, not the wind. This is exactly what I needed this morning.', likes: 112, replies: [] },
+      { n: 'Joshua Okon', i: 'JO', c: '#B20000', t: '2h', text: 'Today\u2019s devotional hit home. I\u2019ve been looking at the waves (bills, deadlines) instead of Jesus. Choosing faith over fear today.', likes: 48, replies: [{ n: 'Ada Mbah', i: 'AM', c: '#EEB931', t: '1h', text: 'Amen! Praying with you, brother \ud83d\ude4f' }] },
+      { n: 'Amara Eze', i: 'AE', c: '#EEB931', t: '5h', text: 'Fixing my eyes on Jesus, not the wind. This is exactly what I needed this morning.', likes: 112, replies: [] },
       { n: 'Pastor Ade', i: 'PA', c: '#141414', t: '1d', text: 'Beloved, whatever storm you are in, He is close enough to catch you. Keep your eyes on Him.', likes: 304, replies: [] }
     ],
     cave: [
-      { n: 'Ruth Bello', i: 'RB', c: '#8B1E1E', t: '3h', text: 'The whisper after the fire. I needed to hear that God isn\u2019t angry at my exhaustion.', likes: 76, replies: [] },
+      { n: 'Ruth Bello', i: 'RB', c: '#B20000', t: '3h', text: 'The whisper after the fire. I needed to hear that God isn\u2019t angry at my exhaustion.', likes: 76, replies: [] },
       { n: 'Tunde Alabi', i: 'TA', c: '#141414', t: '1d', text: 'Rest is also obedience. Thank you for this.', likes: 31, replies: [] }
     ],
-    quiet: [{ n: 'Grace Nwosu', i: 'GN', c: '#C9961A', t: '6h', text: 'Five minutes with no phone was harder than I expected, but so worth it.', likes: 22, replies: [] }],
+    quiet: [{ n: 'Grace Nwosu', i: 'GN', c: '#EEB931', t: '6h', text: 'Five minutes with no phone was harder than I expected, but so worth it.', likes: 22, replies: [] }],
     peace: [
-      { n: 'Ngozi Eze', i: 'NE', c: '#8B1E1E', t: '4h', text: '\u201cGuard\u201d is such a powerful word. Peace as a sentry at the door of my mind.', likes: 58, replies: [] },
+      { n: 'Ngozi Eze', i: 'NE', c: '#B20000', t: '4h', text: '\u201cGuard\u201d is such a powerful word. Peace as a sentry at the door of my mind.', likes: 58, replies: [] },
       { n: 'David Ojo', i: 'DO', c: '#141414', t: '2d', text: 'Handing over worries by name. I am doing this tonight.', likes: 19, replies: [] }
     ],
     harvest: []
@@ -563,7 +563,7 @@
   $('#dr-form').addEventListener('submit', e => {
     e.preventDefault();
     const v = $('#dr-text').value.trim(); if (!v) return;
-    comments[curDev].push({ id: 'u' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#C9961A', t: 'now', text: v, likes: 0, liked: false, mine: true, replies: [] });
+    comments[curDev].push({ id: 'u' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#EEB931', t: 'now', text: v, likes: 0, liked: false, mine: true, replies: [] });
     $('#dr-text').value = ''; $('#dr-post').disabled = true;
     cmSort = 'new'; $$('#dr-sort button').forEach(b => b.classList.toggle('on', b.dataset.sort === 'new'));
     renderComments(); toast('Comment posted');
@@ -590,7 +590,7 @@
     e.preventDefault();
     const v = $('input', f).value.trim(); if (!v) return;
     const p = comments[curDev].find(c => c.id === f.dataset.reply);
-    p.replies.push({ id: 'r' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#C9961A', t: 'now', text: v, mine: true });
+    p.replies.push({ id: 'r' + (uid++), n: 'Grace Adeyemi', i: 'GA', c: '#EEB931', t: 'now', text: v, mine: true });
     replyTo = null; renderComments();
   });
   renderDev();

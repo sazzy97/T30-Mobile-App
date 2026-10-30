@@ -71,8 +71,8 @@ Plus overlays: tab bar, mini audio player, verse sheet and toast notifications.
 | Background | `#F6F6F6` | App background |
 | White | `#FFFFFF` | Cards, surfaces |
 | Black | `#141414` | Primary text |
-| Primary (Dark Red) | `#8B1E1E` | Brand, CTAs, active states |
-| Secondary (Dark Yellow) | `#C9961A` | Highlights, accents, streaks |
+| Primary (Red) | `#B20000` | Brand, CTAs, active states |
+| Secondary (Yellow) | `#EEB931` | Highlights, accents, streaks |
 
 Tints and shades (e.g. `--primary-50 … --primary-700`) are defined in [`css/tokens.css`](css/tokens.css).
 

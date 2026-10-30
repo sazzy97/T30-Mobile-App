@@ -7,17 +7,17 @@
   --white: #FFFFFF;
   --ink: #141414;
 
-  --primary: #8B1E1E;        /* Dark red */
-  --primary-700: #6E1515;
-  --primary-500: #A32A2A;
-  --primary-100: #F3DEDE;
-  --primary-50: #FAF0F0;
+  --primary: #B20000;        /* Brand red */
+  --primary-700: #8A0000;
+  --primary-500: #CC1A1A;
+  --primary-100: #F8D9D9;
+  --primary-50: #FDEEEE;
 
-  --secondary: #C9961A;      /* Dark yellow */
-  --secondary-700: #A47812;
-  --secondary-300: #E7C563;
-  --secondary-100: #F7EBCB;
-  --secondary-50: #FCF7EA;
+  --secondary: #EEB931;      /* Brand yellow */
+  --secondary-700: #A87D0C;
+  --secondary-300: #F5D26B;
+  --secondary-100: #FBEFC8;
+  --secondary-50: #FEF8E6;
 
   /* Neutrals derived from ink */
   --ink-80: #3A3A3A;
@@ -36,8 +36,8 @@
   --success: #2F7D4F;
 
   /* Gradients */
-  --grad-primary: linear-gradient(135deg, #A32A2A 0%, #8B1E1E 45%, #5E1010 100%);
-  --grad-gold: linear-gradient(135deg, #E2B547 0%, #C9961A 55%, #9C7210 100%);
+  --grad-primary: linear-gradient(135deg, #CC1A1A 0%, #B20000 45%, #7A0000 100%);
+  --grad-gold: linear-gradient(135deg, #F6CB55 0%, #EEB931 55%, #C99416 100%);
   --grad-shade: linear-gradient(180deg, rgba(20,20,20,0) 35%, rgba(20,20,20,.85) 100%);
 
   /* Typography */
@@ -55,8 +55,8 @@
   /* Shadows */
   --sh-1: 0 1px 2px rgba(20,20,20,.04), 0 2px 8px rgba(20,20,20,.04);
   --sh-2: 0 4px 12px rgba(20,20,20,.06), 0 12px 32px rgba(20,20,20,.06);
-  --sh-red: 0 10px 24px rgba(139,30,30,.28);
-  --sh-gold: 0 8px 20px rgba(201,150,26,.30);
+  --sh-red: 0 10px 24px rgba(178,0,0,.28);
+  --sh-gold: 0 8px 20px rgba(238,185,49,.30);
 
   /* Motion */
   --ease: cubic-bezier(.22,1,.36,1);
