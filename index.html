@@ -8,8 +8,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/tokens.css">
-<link rel="stylesheet" href="css/styles.css">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/tokens.css?v=20261030v4">
+<link rel="stylesheet" href="css/styles.css?v=20261030v4">
+<style>
+  :root {
+    --primary: #B20000 !important;
+    --primary-700: #8A0000 !important;
+    --primary-500: #CC1A1A !important;
+    --primary-100: #F8D9D9 !important;
+    --primary-50: #FDEEEE !important;
+    --secondary: #EEB931 !important;
+    --secondary-700: #A87D0C !important;
+    --secondary-300: #F5D26B !important;
+    --secondary-100: #FBEFC8 !important;
+    --secondary-50: #FEF8E6 !important;
+    --grad-primary: linear-gradient(135deg, #CC1A1A 0%, #B20000 45%, #7A0000 100%) !important;
+    --grad-gold: linear-gradient(135deg, #F6CB55 0%, #EEB931 55%, #C99416 100%) !important;
+    --sh-red: 0 10px 24px rgba(178,0,0,.28) !important;
+    --sh-gold: 0 8px 20px rgba(238,185,49,.30) !important;
+  }
+</style>
 </head>
 <body>
 
@@ -92,6 +113,7 @@
         <h4>Home · Epic 3 &amp; 4</h4>
         <button class="nav-link" data-nav="home"><span class="num">7</span>Daily Dashboard</button>
         <button class="nav-link" data-nav="live"><span class="num">8</span>Live Devotion (YouTube)</button>
+        <button class="nav-link" data-nav="live" data-modal="1"><span class="num">8c</span>Devotion Complete Modal</button>
         <button class="nav-link" data-nav="past-devotions"><span class="num">8b</span>Past Devotions</button>
       </div>
       <div class="nav-group">
@@ -396,6 +418,7 @@
               <h2 class="h-display" style="font-size:26px;margin-top:18px">Walking in Purpose</h2>
               <div class="yt-host"><img src="assets/live_sermon.jpg" alt=""><span>Pst. James Okafor · Morning Devotion · 6:00 AM</span></div>
               <button class="btn btn-primary" id="btn-watch-yt" data-yt="live" data-kind="today" style="margin-top:18px"><svg class="ico sm"><use href="#i-play"/></svg>Watch on YouTube</button>
+              <button class="btn btn-outline" id="btn-done-devotion" style="margin-top:10px"><svg class="ico sm"><use href="#i-check"/></svg>Done watching? Complete devotion</button>
               <p class="t-sm muted" style="text-align:center;margin-top:10px">Opens YouTube in a new tab. Come back here when you’re done.</p>
 
               <div class="card yt-steps">
@@ -428,15 +451,16 @@
             <div style="height:30px"></div>
           </section>
 
-          <!-- Devotion complete modal + return pill (moved into phone by JS) -->
-          <div class="sf-sheet-bg" id="dd-bg"></div>
-          <div class="sf-modal" id="dd-modal" role="dialog" aria-modal="true" aria-labelledby="dd-title">
-            <div class="dd-check"><svg class="ico lg"><use href="#i-check"/></svg></div>
-            <h3 class="h-display" id="dd-title" style="font-size:26px">Devotion complete!</h3>
-            <p id="dd-sub">You sat at His feet today. Your streak is safe.</p>
-            <div class="dd-read"><span class="dd-ri"><svg class="ico sm"><use href="#i-bible"/></svg></span><div><b>Today’s Bible reading</b><span>John 3 · about 5 min</span></div></div>
-            <button class="btn btn-primary" id="dd-read">Take today’s Bible reading <svg class="ico sm"><use href="#i-right"/></svg></button>
-            <button class="btn btn-ghost" id="dd-later">Maybe later</button>
+          <!-- Devotion complete modal inside 75% black overlay with 20px left/right padding -->
+          <div class="dd-overlay" id="dd-bg">
+            <div class="sf-modal" id="dd-modal" role="dialog" aria-modal="true" aria-labelledby="dd-title">
+              <div class="dd-check"><svg class="ico lg"><use href="#i-check"/></svg></div>
+              <h3 class="h-display" id="dd-title" style="font-size:24px;color:var(--ink)">Devotion complete!</h3>
+              <p id="dd-sub">You sat at His feet today and your streak is safe. Let the Word settle in your heart with today’s reading.</p>
+              <div class="dd-read"><span class="dd-ri"><svg class="ico sm"><use href="#i-bible"/></svg></span><div><b>Today’s Bible reading</b><span>John 3 · about 5 min</span></div></div>
+              <button class="btn btn-primary" id="dd-read" type="button">Take today’s Bible reading <svg class="ico sm"><use href="#i-right"/></svg></button>
+              <button class="btn btn-ghost" id="dd-later" type="button">Maybe later</button>
+            </div>
           </div>
           <button class="yt-return" id="yt-return" type="button"><svg class="ico sm"><use href="#i-play"/></svg>Back from YouTube? <b>Tap to continue</b></button>
 
@@ -832,15 +856,24 @@
               <span class="sf-kicker light">Praying for <b id="pray-need">Anxiety</b></span>
               <span class="sf-timer" id="pray-timer">05:00</span>
             </div>
-            <div class="sf-steps-labels" id="pray-tabs"><span class="on">Adore</span><span>Confess</span><span>Thank</span><span>Ask</span></div>
+            <div class="sf-steps-labels" id="pray-tabs">
+              <span class="on" data-step="0">Adore</span>
+              <span data-step="1">Confess</span>
+              <span data-step="2">Thank</span>
+              <span data-step="3">Ask</span>
+            </div>
             <div class="sf-im-body">
+              <span class="sf-kicker light" id="pray-step-lbl">Step 1 of 4</span>
               <h2 class="sf-step-title" id="pray-title">Adore</h2>
-              <p class="sf-im-text sm" id="pray-text"></p>
-              <span class="sf-im-ref" id="pray-ref"></span>
+              <blockquote class="sf-pray-scripture" id="pray-scripture">
+                <p id="pray-verse">“God is our refuge and strength, an ever-present help in trouble.”</p>
+                <cite id="pray-ref">Psalm 46:1 · NIV</cite>
+              </blockquote>
+              <p class="sf-im-text sm" id="pray-text">You are my refuge and strength, an ever-present help. You are bigger than every worry I carry.</p>
             </div>
             <div class="sf-im-foot">
-              <button class="btn sf-glass-btn" id="pray-pause" aria-label="Pause"><svg class="ico sm"><use href="#i-pause"/></svg></button>
-              <button class="btn btn-gold" id="pray-next">Next step</button>
+              <button class="btn sf-glass-btn" id="pray-pause" type="button" aria-label="Pause"><svg class="ico sm"><use href="#i-pause"/></svg></button>
+              <button class="btn btn-gold" id="pray-next" type="button">Next step <svg class="ico sm"><use href="#i-right"/></svg></button>
             </div>
           </section>
 
@@ -1183,6 +1216,6 @@
   </aside>
 </div>
 
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20261030v4"></script>
 </body>
 </html>

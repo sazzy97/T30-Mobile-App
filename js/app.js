@@ -43,7 +43,7 @@
     audioBar.classList.toggle('hidden', id !== 'bible');
 
     // sidebar
-    $$('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.nav === id && (!!n.dataset.sheet === sheet)));
+    $$('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.nav === id && (!!n.dataset.sheet === sheet) && !n.dataset.modal));
 
     window.T30Sub && window.T30Sub.onEnter(id);
     if (sheet) setTimeout(() => openSheet($('.verse[data-v="16"]')), 380);
@@ -69,7 +69,15 @@
     const tabEl = e.target.closest('[data-tabgo]');
     if (tabEl) { history.length = 0; go(tabEl.dataset.tabgo, { push: false }); return; }
     const nav = e.target.closest('[data-nav]');
-    if (nav) { history.length = 0; go(nav.dataset.nav, { push: false, sheet: !!nav.dataset.sheet }); return; }
+    if (nav) {
+      history.length = 0;
+      go(nav.dataset.nav, { push: false, sheet: !!nav.dataset.sheet });
+      if (nav.dataset.modal) {
+        $$('.nav-link').forEach(n => n.classList.toggle('active', n === nav));
+        setTimeout(() => showDoneModal({ kind: 'today' }), 120);
+      }
+      return;
+    }
     const t = e.target.closest('[data-toast]');
     if (t) toast(t.dataset.toast);
   });
@@ -231,11 +239,13 @@
      SUB-FEATURES
      ========================================================== */
   // Move in-screen sheets into the phone viewport so they overlay correctly
-  $$('.sf-sheet, .sf-sheet-bg, .sf-modal, .yt-return').forEach(el => viewport.appendChild(el));
+  $$('.sf-sheet, .sf-sheet-bg, .dd-overlay, .yt-return').forEach(el => viewport.appendChild(el));
   const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'grace-sheet': 'grace-sheet-bg', 'dd-modal': 'dd-bg' };
   function openSf(id) { $('#' + id).classList.add('open'); $('#' + sheetPairs[id]).classList.add('open'); }
-  function closeSf() { $$('.sf-sheet, .sf-sheet-bg, .sf-modal').forEach(e => e.classList.remove('open')); }
-  Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', closeSf));
+  function closeSf() { $$('.sf-sheet, .sf-sheet-bg, .dd-overlay, .sf-modal').forEach(e => e.classList.remove('open')); }
+  Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeSf();
+  }));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSf(); });
 
   // Grace Pass on Home
@@ -368,15 +378,27 @@
     Provision: ['You are Jehovah Jireh, my provider.', 'Forgive me for worry and comparison.', 'Thank You for daily bread and every open door.', 'Meet every need according to Your riches in glory.'],
     Gratitude: ['You are good, and Your love endures forever.', 'Forgive me for the times I forgot to say thank You.', 'Thank You for salvation, for grace, for this very day.', 'Make my life an offering of praise.']
   };
-  const prayRefs = ['Psalm 46:1', '1 John 1:9', 'Philippians 4:7', '1 Peter 5:7'];
+  const prayVerses = [
+    '“God is our refuge and strength, an ever-present help in trouble.”',
+    '“If we confess our sins, he is faithful and just and will forgive us our sins and purify us from all unrighteousness.”',
+    '“And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.”',
+    '“Cast all your anxiety on him because he cares for you.”'
+  ];
+  const prayRefs = ['Psalm 46:1 · NIV', '1 John 1:9 · NIV', 'Philippians 4:7 · NIV', '1 Peter 5:7 · NIV'];
   const prayTitles = ['Adore', 'Confess', 'Thank', 'Ask'];
   let ps = 0, prayT, remaining = 0, paused = false;
   function renderPray() {
+    $('#pray-step-lbl').textContent = `Step ${ps + 1} of 4`;
     $('#pray-title').textContent = prayTitles[ps];
-    const el = $('#pray-text'); el.textContent = prayScripts[need][ps]; el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    $('#pray-verse').textContent = prayVerses[ps];
     $('#pray-ref').textContent = prayRefs[ps];
+    const list = prayScripts[need] || prayScripts.Anxiety;
+    const el = $('#pray-text'); el.textContent = list[ps]; el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
+    const sc = $('#pray-scripture'); sc.style.animation = 'none'; sc.offsetHeight; sc.style.animation = 'sfIn .4s var(--ease)';
     $$('#pray-tabs span').forEach((s, i) => { s.classList.toggle('on', i === ps); s.classList.toggle('done', i < ps); });
-    $('#pray-next').textContent = ps === 3 ? 'Amen · Finish' : 'Next step';
+    $('#pray-next').innerHTML = ps === 3
+      ? 'Amen · Finish <svg class="ico sm"><use href="#i-check"/></svg>'
+      : 'Next step <svg class="ico sm"><use href="#i-right"/></svg>';
   }
   function fmtT(s) { return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
   function startPray() {
@@ -388,9 +410,16 @@
     clearInterval(prayT);
     prayT = setInterval(() => { if (!paused && remaining > 0) { remaining--; $('#pray-timer').textContent = fmtT(remaining); } }, 1000);
   }
-  $('#pray-next').addEventListener('click', () => {
+  $('#pray-next').addEventListener('click', e => {
+    e.stopPropagation();
     if (ps < 3) { ps++; renderPray(); }
     else { clearInterval(prayT); setDone('Prayer complete'); go('complete'); }
+  });
+  $('#pray-tabs').addEventListener('click', e => {
+    const tab = e.target.closest('span[data-step]');
+    if (!tab) return;
+    ps = parseInt(tab.dataset.step, 10) || 0;
+    renderPray();
   });
   $('#pray-pause').addEventListener('click', e => {
     paused = !paused;
@@ -663,11 +692,9 @@
   window.addEventListener('focus', checkReturn);
   $('#yt-return').addEventListener('click', showDone);
 
-  function showDone() {
-    if (!pendingYT) return;
-    const p = pendingYT; pendingYT = null; leftAt = 0;
+  function showDoneModal(p) {
     $('#yt-return').classList.remove('show');
-    if (p.kind === 'past') {
+    if (p && p.kind === 'past') {
       const it = pastData.find(x => x.id === p.id); if (it) it.watched = true;
       $('#dd-title').textContent = 'You\u2019re all caught up!';
       $('#dd-sub').textContent = `You watched \u201c${p.title}\u201d. Grace over guilt, you\u2019re back in rhythm.`;
@@ -678,6 +705,13 @@
     renderPast();
     openSf('dd-modal');
   }
+  function showDone() {
+    const p = pendingYT || { kind: 'today' };
+    pendingYT = null; leftAt = 0;
+    showDoneModal(p);
+  }
+  const doneDevBtn = $('#btn-done-devotion');
+  if (doneDevBtn) doneDevBtn.addEventListener('click', () => showDoneModal({ kind: 'today' }));
   $('#dd-read').addEventListener('click', () => { closeSf(); go('bible'); });
   $('#dd-later').addEventListener('click', closeSf);
 
