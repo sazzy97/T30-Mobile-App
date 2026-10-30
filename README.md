@@ -14,7 +14,8 @@ T30 helps believers build a consistent devotional habit. This repository contain
 ### Key features
 - **Guided onboarding:** sign-in, goals, preferred time, Bible translation and preferences
 - **Home dashboard:** today's devotion, streak, progress and quick actions
-- **Live devotions:** live session view with simulated real-time chat and reactions
+- **Live devotion on YouTube:** a thumbnail screen that opens the live stream on YouTube; on return, a "Devotion complete" modal sends the user to today's Bible reading
+- **Past devotions:** catch-up library of past devotion videos (Missed / Watched filters, weekly progress)
 - **Bible reader:** chapter reading, verse highlighting (multiple colours), notes and a verse action sheet
 - **Audio player:** persistent mini-player with play/pause and progress
 - **Discover:** browse devotionals, topics and reading plans
@@ -35,7 +36,8 @@ T30 helps believers build a consistent devotional habit. This repository contain
 | 5 | Bible translation | `translation` |
 | 6 | Preferences | `prefs` |
 | 7 | Home | `home` |
-| 8 | Live devotion | `live` |
+| 8 | Live devotion (YouTube launch) | `live` |
+| 8b | Past devotions | `past-devotions` |
 | 9 | Bible reader | `bible` |
 | 10 | Discover | `discover` |
 | 11 | Reading plan | `plan` |
@@ -51,7 +53,7 @@ Plus overlays: tab bar, mini audio player, verse sheet and toast notifications.
 | Confessions | `conf-list` → `conf-session` → `complete` | Topic sets, step progress, "spoken aloud" mic, prev/next |
 | Declarations | `decl-list` → `decl-session` → `complete` | Daily declaration, decks, tap-3× progress ring, share |
 | Bible Plans | `plans-list` → `plan` → `bible` | Active plans with progress, recommendations, filter by length |
-| Prayer Companion | `pray-list` → `pray-session` → `complete` | Pick a need and length, ACTS steps, breathing animation, timer, pause |
+| Prayer Companion | `pray-list` → `pray-session` → `complete` | Pick a need and length, ACTS steps (Adore, Confess, Thank, Ask), timer, pause |
 
 ### Profile extensions
 | Screen | ID | Highlights |
@@ -121,6 +123,11 @@ Then open **http://localhost:5173**.
    **https://sazzy97.github.io/T30-Mobile-App/**
 
 It works on both mobile and desktop browsers.
+
+---
+
+## 🔗 YouTube links
+Replace the placeholder URLs in the `YT` constant at the top of the "Live devotion on YouTube" block in [`js/app.js`](js/app.js) with the real live-stream and channel links.
 
 ---
 

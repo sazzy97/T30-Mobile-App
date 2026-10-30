@@ -91,7 +91,8 @@
       <div class="nav-group">
         <h4>Home · Epic 3 &amp; 4</h4>
         <button class="nav-link" data-nav="home"><span class="num">7</span>Daily Dashboard</button>
-        <button class="nav-link" data-nav="live"><span class="num">8</span>Live Devotion</button>
+        <button class="nav-link" data-nav="live"><span class="num">8</span>Live Devotion (YouTube)</button>
+        <button class="nav-link" data-nav="past-devotions"><span class="num">8b</span>Past Devotions</button>
       </div>
       <div class="nav-group">
         <h4>Bible · Epic 2</h4>
@@ -330,14 +331,16 @@
               <div class="tl"><span class="badge badge-live"><span class="pulse"></span>LIVE</span></div>
               <div class="tr"><span class="badge badge-dark"><svg class="ico xs"><use href="#i-eye"/></svg>1.2k</span></div>
               <div class="bl">
-                <span class="t-xs" style="opacity:.8">Morning Devotion · Started 8 min ago</span>
+                <span class="t-xs" style="opacity:.8">Morning Devotion · Live on YouTube</span>
                 <h4>Walking in Purpose with Pst. James</h4>
                 <div class="row">
                   <div class="viewers"><div class="avatars"><span style="background:#C9961A"></span><span style="background:#A32A2A"></span><span style="background:#555"></span></div>+1,214 watching</div>
-                  <span class="join-btn"><svg class="ico xs fill"><use href="#i-play"/></svg>Join</span>
+                  <span class="join-btn"><svg class="ico xs fill"><use href="#i-play"/></svg>Watch</span>
                 </div>
               </div>
             </div>
+
+                        <div class="pad" style="margin-top:12px"><div class="card sf-row" id="card-past" data-go="past-devotions"><span class="sf-play red"><svg class="ico sm"><use href="#i-clock"/></svg></span><div class="sf-row-t"><b>Missed a devotion?</b><span>Catch up on past devotion videos</span></div><svg class="ico sm muted"><use href="#i-right"/></svg></div></div>
 
             <div class="section-head"><h3 class="h-lg">Today's devotion</h3><a data-go="plan">View plan</a></div>
             <div class="card devotion-card" id="card-devotion" data-go="plan">
@@ -375,34 +378,67 @@
           </section>
 
           <!-- ==================== 8. LIVE ==================== -->
-          <section class="screen live" data-screen="live" data-dark="1">
-            <div class="live-video">
-              <img src="assets/live_sermon.jpg" alt="Live sermon" style="object-position:62% center">
-              <div class="top">
-                <button class="icon-btn glass" data-back aria-label="Close"><svg class="ico"><use href="#i-down"/></svg></button>
-                <span class="badge badge-live"><span class="pulse"></span>LIVE</span>
-                <span class="badge badge-dark"><svg class="ico xs"><use href="#i-eye"/></svg><span id="viewer-count">1,218</span></span>
-                <span class="sp"></span>
-                <button class="icon-btn glass" aria-label="Picture in picture" id="btn-pip"><svg class="ico"><use href="#i-pip"/></svg></button>
-                <button class="icon-btn glass" aria-label="Share"><svg class="ico"><use href="#i-share"/></svg></button>
+          <section class="screen" data-screen="live">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>Live Devotion</h3>
+              <button class="icon-btn" aria-label="Share" data-toast="Link copied"><svg class="ico"><use href="#i-share"/></svg></button>
+            </div>
+            <div class="pad">
+              <div class="yt-thumb" id="yt-live" data-yt="live" data-kind="today" role="link" tabindex="0" aria-label="Watch today's live devotion on YouTube">
+                <img src="assets/live_sermon.jpg" alt="Pastor preaching live" style="object-position:62% center">
+                <div class="shade"></div>
+                <span class="badge badge-live yt-tl"><span class="pulse"></span>LIVE</span>
+                <span class="badge badge-dark yt-tr"><svg class="ico xs"><use href="#i-eye"/></svg>1,218 watching</span>
+                <span class="yt-play" aria-hidden="true"><svg class="ico lg"><use href="#i-play"/></svg></span>
+                <span class="yt-brand"><i><svg viewBox="0 0 24 24" width="12" height="12"><path fill="#fff" d="M8 5v14l11-7z"/></svg></i>Watch on YouTube</span>
               </div>
-              <div class="live-info">
-                <h3>Walking in Purpose</h3>
-                <div class="host"><img src="assets/live_sermon.jpg" style="width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:65% 25%" alt="">Pst. James Okafor · Morning Devotion</div>
+              <h2 class="h-display" style="font-size:26px;margin-top:18px">Walking in Purpose</h2>
+              <div class="yt-host"><img src="assets/live_sermon.jpg" alt=""><span>Pst. James Okafor · Morning Devotion · 6:00 AM</span></div>
+              <button class="btn btn-primary" id="btn-watch-yt" data-yt="live" data-kind="today" style="margin-top:18px"><svg class="ico sm"><use href="#i-play"/></svg>Watch on YouTube</button>
+              <p class="t-sm muted" style="text-align:center;margin-top:10px">Opens YouTube in a new tab. Come back here when you’re done.</p>
+
+              <div class="card yt-steps">
+                <div><span>1</span><p>Tap the thumbnail to watch on YouTube</p></div>
+                <div><span>2</span><p>Join the devotion with the community</p></div>
+                <div><span>3</span><p>Return to T30 to log it and read today’s Bible passage</p></div>
               </div>
             </div>
-            <div class="chat" id="chat">
-              <div class="msg"><span class="ma" style="background:#C9961A">TA</span><div><b>Tolu A.</b>Good morning family! 🙏</div></div>
-              <div class="msg"><span class="ma" style="background:#A32A2A">MK</span><div><b>Mike K.</b>This word is right on time</div></div>
-              <div class="msg"><span class="ma" style="background:#555">SE</span><div><b>Sarah E.</b>Joining from Lagos ❤️</div></div>
-              <div class="msg"><span class="ma" style="background:#8B6B1A">DO</span><div><b>David O.</b>Amen! Purpose over pressure 🔥</div></div>
-            </div>
-            <div class="floaters" id="floaters"></div>
-            <div class="live-input">
-              <div class="fake-in">Say something kind…</div>
-              <button class="amen-btn" id="btn-amen">🙏 Amen</button>
-            </div>
+
+            <div class="section-head"><h3 class="h-lg">Missed a devotion?</h3><a data-go="past-devotions">See all</a></div>
+            <div class="hscroll" id="live-past"></div>
+            <div style="height:30px"></div>
           </section>
+
+          <!-- ==================== 8b. PAST DEVOTIONS ==================== -->
+          <section class="screen" data-screen="past-devotions">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>Past Devotions</h3>
+              <span style="width:44px"></span>
+            </div>
+            <div class="pad">
+              <div class="card pd-sum">
+                <div><b id="pd-sum-t">0 of 0 caught up</b><span>Watch what you missed, no guilt. Grace over guilt. 💛</span></div>
+                <div class="sf-bar" style="margin-top:10px"><i id="pd-sum-bar" style="width:0"></i></div>
+              </div>
+              <div class="pills sf-pills" id="pd-filter" style="margin-top:14px"><button class="pill active" data-f="all">All</button><button class="pill" data-f="missed">Missed</button><button class="pill" data-f="watched">Watched</button></div>
+            </div>
+            <div id="pd-list"></div>
+            <div style="height:30px"></div>
+          </section>
+
+          <!-- Devotion complete modal + return pill (moved into phone by JS) -->
+          <div class="sf-sheet-bg" id="dd-bg"></div>
+          <div class="sf-modal" id="dd-modal" role="dialog" aria-modal="true" aria-labelledby="dd-title">
+            <div class="dd-check"><svg class="ico lg"><use href="#i-check"/></svg></div>
+            <h3 class="h-display" id="dd-title" style="font-size:26px">Devotion complete!</h3>
+            <p id="dd-sub">You sat at His feet today. Your streak is safe.</p>
+            <div class="dd-read"><span class="dd-ri"><svg class="ico sm"><use href="#i-bible"/></svg></span><div><b>Today’s Bible reading</b><span>John 3 · about 5 min</span></div></div>
+            <button class="btn btn-primary" id="dd-read">Take today’s Bible reading <svg class="ico sm"><use href="#i-right"/></svg></button>
+            <button class="btn btn-ghost" id="dd-later">Maybe later</button>
+          </div>
+          <button class="yt-return" id="yt-return" type="button"><svg class="ico sm"><use href="#i-play"/></svg>Back from YouTube? <b>Tap to continue</b></button>
 
           <!-- ==================== 9. BIBLE ==================== -->
           <section class="screen with-tabs" data-screen="bible" data-tab="bible" style="padding-bottom:200px">
@@ -798,7 +834,6 @@
             </div>
             <div class="sf-steps-labels" id="pray-tabs"><span class="on">Adore</span><span>Confess</span><span>Thank</span><span>Ask</span></div>
             <div class="sf-im-body">
-              <div class="sf-breathe"><i></i><i></i><b id="breathe-t">Breathe in</b></div>
               <h2 class="sf-step-title" id="pray-title">Adore</h2>
               <p class="sf-im-text sm" id="pray-text"></p>
               <span class="sf-im-ref" id="pray-ref"></span>

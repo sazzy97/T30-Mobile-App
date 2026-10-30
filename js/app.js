@@ -7,7 +7,7 @@
 
   const viewport = $('#viewport');
   const screens = $$('.screen');
-  const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'bible', 'discover',
+  const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'past-devotions', 'bible', 'discover',
     'dev-list', 'dev-read', 'conf-list', 'conf-session', 'decl-list', 'decl-session', 'plans-list', 'pray-list', 'pray-session', 'complete',
     'plan', 'wotd', 'profile', 'streak', 'settings'];
   const tabbar = $('#tabbar');
@@ -45,7 +45,6 @@
     // sidebar
     $$('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.nav === id && (!!n.dataset.sheet === sheet)));
 
-    if (id === 'live') startLive(); else stopLive();
     window.T30Sub && window.T30Sub.onEnter(id);
     if (sheet) setTimeout(() => openSheet($('.verse[data-v="16"]')), 380);
 
@@ -207,46 +206,6 @@
     $('#share-card').className = 'share-card ' + t.dataset.t;
   }));
 
-  /* ---------- Live ---------- */
-  const chatMsgs = [
-    ['Ngozi P.', 'Amen and amen 🙌', '#A32A2A'],
-    ['James T.', 'Watching with my whole family', '#555'],
-    ['Ada E.', 'Purpose is not pressure. Needed that!', '#C9961A'],
-    ['Kemi S.', '🙏🙏🙏', '#8B6B1A'],
-    ['Paul M.', 'Grace over guilt, always', '#6E1515'],
-    ['Ruth B.', 'Thank you Pastor! ❤️', '#3A3A3A'],
-  ];
-  let liveT, mi = 0, viewers = 1218;
-  function addMsg([name, text, color]) {
-    const chat = $('#chat');
-    const el = document.createElement('div');
-    el.className = 'msg';
-    const initials = name.split(' ').map(s => s[0]).join('').replace('.', '');
-    el.innerHTML = `<span class="ma" style="background:${color}">${initials}</span><div><b>${name}</b>${text}</div>`;
-    chat.appendChild(el);
-    while (chat.children.length > 7) chat.firstElementChild.remove();
-  }
-  function floatAmen(emoji = '🙏') {
-    const f = document.createElement('span');
-    f.className = 'floater';
-    f.textContent = emoji;
-    f.style.setProperty('--dx', `${(Math.random() - .5) * 60}px`);
-    $('#floaters').appendChild(f);
-    setTimeout(() => f.remove(), 2700);
-  }
-  function startLive() {
-    stopLive();
-    liveT = setInterval(() => {
-      addMsg(chatMsgs[mi++ % chatMsgs.length]);
-      viewers += Math.floor(Math.random() * 6);
-      $('#viewer-count').textContent = viewers.toLocaleString();
-      if (Math.random() > .4) floatAmen(['🙏', '❤️', '🔥', '🙌'][Math.floor(Math.random() * 4)]);
-    }, 2200);
-  }
-  function stopLive() { clearInterval(liveT); }
-  $('#btn-amen').addEventListener('click', () => { for (let i = 0; i < 4; i++) setTimeout(() => floatAmen('🙏'), i * 120); });
-  $('#btn-pip').addEventListener('click', () => toast('Picture-in-picture enabled'));
-
   /* ---------- Profile heatmap (October) ---------- */
   const heat = $('#heat');
   ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(d => heat.insertAdjacentHTML('beforeend', `<span class="hd">${d}</span>`));
@@ -272,10 +231,10 @@
      SUB-FEATURES
      ========================================================== */
   // Move in-screen sheets into the phone viewport so they overlay correctly
-  $$('.sf-sheet, .sf-sheet-bg').forEach(el => viewport.appendChild(el));
-  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'grace-sheet': 'grace-sheet-bg' };
+  $$('.sf-sheet, .sf-sheet-bg, .sf-modal, .yt-return').forEach(el => viewport.appendChild(el));
+  const sheetPairs = { 'streak-sheet': 'streak-sheet-bg', 'del-sheet': 'del-bg', 'grace-sheet': 'grace-sheet-bg', 'dd-modal': 'dd-bg' };
   function openSf(id) { $('#' + id).classList.add('open'); $('#' + sheetPairs[id]).classList.add('open'); }
-  function closeSf() { $$('.sf-sheet, .sf-sheet-bg').forEach(e => e.classList.remove('open')); }
+  function closeSf() { $$('.sf-sheet, .sf-sheet-bg, .sf-modal').forEach(e => e.classList.remove('open')); }
   Object.values(sheetPairs).forEach(bg => $('#' + bg).addEventListener('click', closeSf));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSf(); });
 
@@ -411,7 +370,7 @@
   };
   const prayRefs = ['Psalm 46:1', '1 John 1:9', 'Philippians 4:7', '1 Peter 5:7'];
   const prayTitles = ['Adore', 'Confess', 'Thank', 'Ask'];
-  let ps = 0, prayT, remaining = 0, paused = false, breatheT;
+  let ps = 0, prayT, remaining = 0, paused = false;
   function renderPray() {
     $('#pray-title').textContent = prayTitles[ps];
     const el = $('#pray-text'); el.textContent = prayScripts[need][ps]; el.style.animation = 'none'; el.offsetHeight; el.style.animation = '';
@@ -426,14 +385,12 @@
     $('[data-screen="pray-session"]').classList.remove('paused');
     $('#pray-timer').textContent = fmtT(remaining);
     renderPray();
-    clearInterval(prayT); clearInterval(breatheT);
+    clearInterval(prayT);
     prayT = setInterval(() => { if (!paused && remaining > 0) { remaining--; $('#pray-timer').textContent = fmtT(remaining); } }, 1000);
-    let inhale = true; $('#breathe-t').textContent = 'Breathe in';
-    breatheT = setInterval(() => { if (!paused) { inhale = !inhale; $('#breathe-t').textContent = inhale ? 'Breathe in' : 'Breathe out'; } }, 4000);
   }
   $('#pray-next').addEventListener('click', () => {
     if (ps < 3) { ps++; renderPray(); }
-    else { clearInterval(prayT); clearInterval(breatheT); setDone('Prayer complete'); go('complete'); }
+    else { clearInterval(prayT); setDone('Prayer complete'); go('complete'); }
   });
   $('#pray-pause').addEventListener('click', e => {
     paused = !paused;
@@ -638,13 +595,101 @@
   });
   renderDev();
 
+  /* ==========================================================
+     LIVE DEVOTION ON YOUTUBE + PAST DEVOTIONS
+     ========================================================== */
+  // TODO: replace with the real T30 YouTube channel / live stream URLs
+  const YT = { live: 'https://www.youtube.com/@T30App/live', channel: 'https://www.youtube.com/@T30App/videos' };
+  const pastData = [
+    { id: 'p1', week: 'This week', title: 'Purpose over Pressure', by: 'Pst. James Okafor', date: 'Thu, Oct 29', dur: '28:14', img: 'assets/live_sermon.jpg', watched: true },
+    { id: 'p2', week: 'This week', title: 'Anchored in the Storm', by: 'Pst. James Okafor', date: 'Wed, Oct 28', dur: '31:02', img: 'assets/water_walk.jpg', watched: false },
+    { id: 'p3', week: 'This week', title: 'The Power of a Quiet Heart', by: 'Sis. Ruth Bello', date: 'Tue, Oct 27', dur: '24:40', img: 'assets/prayer_bible.jpg', watched: true },
+    { id: 'p4', week: 'This week', title: 'New Mercies Monday', by: 'Pst. Ade Okafor', date: 'Mon, Oct 26', dur: '29:30', img: 'assets/splash_hero.jpg', watched: false },
+    { id: 'p5', week: 'Last week', title: 'Grace Wins on Sunday', by: 'Pst. James Okafor', date: 'Sun, Oct 25', dur: '36:10', img: 'assets/wheat_sunrise.jpg', watched: true },
+    { id: 'p6', week: 'Last week', title: 'Light in the Cave', by: 'Sis. Ruth Bello', date: 'Fri, Oct 23', dur: '26:48', img: 'assets/cave_light.jpg', watched: false },
+    { id: 'p7', week: 'Last week', title: 'Peace that Guards', by: 'Dns. Ngozi Eze', date: 'Thu, Oct 22', dur: '27:05', img: 'assets/candle_peace.jpg', watched: true },
+    { id: 'p8', week: 'Last week', title: 'Seasons of Harvest', by: 'Pst. James Adu', date: 'Wed, Oct 21', dur: '30:21', img: 'assets/wheat_sunrise.jpg', watched: false }
+  ];
+  let pastFilter = 'all', pendingYT = null, leftAt = 0;
+  const attrs = p => `data-yt="past" data-kind="past" data-id="${p.id}" data-title="${esc(p.title)}"`;
+
+  function renderPast() {
+    // summary
+    const wk = pastData.filter(p => p.week === 'This week'), done = wk.filter(p => p.watched).length;
+    $('#pd-sum-t').textContent = `${done} of ${wk.length} caught up this week`;
+    $('#pd-sum-bar').style.width = (done / wk.length * 100) + '%';
+    // full list, grouped by week
+    const list = pastData.filter(p => pastFilter === 'all' || (pastFilter === 'missed' ? !p.watched : p.watched));
+    let html = '';
+    ['This week', 'Last week'].forEach(w => {
+      const items = list.filter(p => p.week === w); if (!items.length) return;
+      html += `<div class="section-head"><h3 class="h-lg">${w}</h3><span class="t-sm muted">${items.length} video${items.length > 1 ? 's' : ''}</span></div><div class="pad sf-list">` +
+        items.map(p => `<div class="card pd-item" ${attrs(p)} role="link" tabindex="0">
+          <div class="pd-thumb"><img src="${p.img}" alt=""><span class="pd-play"><svg class="ico sm"><use href="#i-play"/></svg></span><em>${p.dur}</em></div>
+          <div class="pd-info"><b>${esc(p.title)}</b><span>${p.by} \u00b7 ${p.date}</span>
+          ${p.watched ? '<span class="pd-st ok"><svg class="ico xs"><use href="#i-check"/></svg>Watched</span>' : '<span class="pd-st miss">Missed \u00b7 Watch now</span>'}</div></div>`).join('') + '</div>';
+    });
+    $('#pd-list').innerHTML = html || '<div class="dr-empty"><svg class="ico lg"><use href="#i-check"/></svg><b>Nothing here</b><span>You\u2019re all caught up. Well done!</span></div>';
+    // strip on the live screen: unwatched first
+    const strip = pastData.slice().sort((a, b) => a.watched - b.watched).slice(0, 5);
+    $('#live-past').innerHTML = strip.map(p => `<div class="plan-card" ${attrs(p)} role="link" tabindex="0"><div class="img-card"><img src="${p.img}" alt="">
+      ${p.watched ? '' : '<div class="tl"><span class="badge badge-live">MISSED</span></div>'}<div class="tr"><span class="badge badge-dark">${p.dur}</span></div></div><b>${esc(p.title)}</b><span>${p.date}</span></div>`).join('');
+  }
+  $('#pd-filter').addEventListener('click', e => {
+    const b = e.target.closest('.pill'); if (!b) return;
+    pastFilter = b.dataset.f; $$('#pd-filter .pill').forEach(x => x.classList.toggle('active', x === b)); renderPast();
+  });
+
+  // Open YouTube in a new tab and remember what is being watched
+  function openYT(el) {
+    pendingYT = { kind: el.dataset.kind || 'today', id: el.dataset.id || null, title: el.dataset.title || '' };
+    leftAt = 0;
+    const url = el.dataset.yt === 'live' ? YT.live : YT.channel;
+    window.open(url, '_blank', 'noopener');
+    toast('Opening YouTube\u2026');
+    $('#yt-return').classList.add('show');
+  }
+  document.addEventListener('click', e => { const t = e.target.closest('[data-yt]'); if (t) openYT(t); });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const t = e.target.closest && e.target.closest('[data-yt][role="link"]'); if (t) { e.preventDefault(); openYT(t); }
+  });
+
+  // Detect the user coming back from YouTube
+  const markLeft = () => { if (pendingYT && !leftAt) leftAt = Date.now(); };
+  const checkReturn = () => { if (pendingYT && leftAt && Date.now() - leftAt > 3000) showDone(); else if (pendingYT && leftAt) leftAt = 0; };
+  document.addEventListener('visibilitychange', () => document.hidden ? markLeft() : checkReturn());
+  window.addEventListener('blur', markLeft);
+  window.addEventListener('focus', checkReturn);
+  $('#yt-return').addEventListener('click', showDone);
+
+  function showDone() {
+    if (!pendingYT) return;
+    const p = pendingYT; pendingYT = null; leftAt = 0;
+    $('#yt-return').classList.remove('show');
+    if (p.kind === 'past') {
+      const it = pastData.find(x => x.id === p.id); if (it) it.watched = true;
+      $('#dd-title').textContent = 'You\u2019re all caught up!';
+      $('#dd-sub').textContent = `You watched \u201c${p.title}\u201d. Grace over guilt, you\u2019re back in rhythm.`;
+    } else {
+      $('#dd-title').textContent = 'Devotion complete!';
+      $('#dd-sub').textContent = 'You sat at His feet today and your streak is safe. Let the Word settle in your heart with today\u2019s reading.';
+    }
+    renderPast();
+    openSf('dd-modal');
+  }
+  $('#dd-read').addEventListener('click', () => { closeSf(); go('bible'); });
+  $('#dd-later').addEventListener('click', closeSf);
+
   /* ---------- Screen enter hooks ---------- */
+  renderPast();
   window.T30Sub = {
     onEnter(id) {
       closeSf();
+      if (id === 'live' || id === 'past-devotions') renderPast();
       if (id === 'conf-session') { ci = 0; renderConf(); }
       if (id === 'decl-session') { di = 0; renderDecl(); }
-      if (id === 'pray-session') startPray(); else { clearInterval(prayT); clearInterval(breatheT); }
+      if (id === 'pray-session') startPray(); else { clearInterval(prayT); }
       if (id === 'complete') confetti();
       if (id === 'streak') $('#streak-sheet h3').textContent = 'Share your streak';
     }

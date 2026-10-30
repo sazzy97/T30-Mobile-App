@@ -754,11 +754,6 @@ img { display: block; max-width: 100%; }
 .sf-steps-labels span { font-size:12px; font-weight:600; padding:6px 12px; border-radius:var(--r-pill); color:rgba(255,255,255,.55); background:rgba(255,255,255,.06); transition:all .3s; }
 .sf-steps-labels span.on { background:var(--secondary); color:#fff; }
 .sf-steps-labels span.done { color:#fff; }
-.sf-breathe { position:relative; width:150px; height:150px; display:grid; place-items:center; }
-.sf-breathe i { position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle, rgba(231,197,99,.55), rgba(201,150,26,0) 70%); animation:sfBreathe 8s ease-in-out infinite; }
-.sf-breathe i:nth-child(2) { inset:25px; background:rgba(231,197,99,.25); animation-delay:-.4s; }
-.sf-breathe b { position:relative; font-size:13px; font-weight:600; letter-spacing:.5px; }
-.sf-immersive.paused .sf-breathe i { animation-play-state:paused; }
 .sf-step-title { font-family:var(--font-display); font-size:30px; font-weight:600; color:var(--secondary-300); }
 
 .sf-toggle-row { display:flex; align-items:center; gap:12px; padding:14px; }
@@ -866,7 +861,6 @@ img { display: block; max-width: 100%; }
 @keyframes sfIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 @keyframes sfRipple { from { opacity:.8; transform:scale(1); } to { opacity:0; transform:scale(1.5); } }
 @keyframes sfPop { 0% { transform:scale(.6); } 60% { transform:scale(1.1); } 100% { transform:scale(1); } }
-@keyframes sfBreathe { 0%,100% { transform:scale(.7); opacity:.6; } 50% { transform:scale(1.1); opacity:1; } }
 @keyframes sfFall { to { transform:translateY(820px) rotate(540deg); opacity:.2; } }
 @keyframes sfFlicker { 0%,100% { transform:scale(1) rotate(0); } 50% { transform:scale(1.06) rotate(-3deg); } }
 
@@ -912,3 +906,59 @@ img { display: block; max-width: 100%; }
 .sf-cc { display:inline-flex !important; align-items:center; gap:4px; margin-top:4px; font-size:11.5px !important; font-weight:600; color:var(--primary) !important; }
 .sf-feature .meta .sf-cc { color:#fff !important; margin-left:10px; opacity:.9; }
 .sf-feature .meta { display:flex; align-items:center; flex-wrap:wrap; }
+
+/* ==========================================================
+   LIVE DEVOTION ON YOUTUBE + PAST DEVOTIONS
+   ========================================================== */
+.yt-thumb { position:relative; height:220px; border-radius:var(--r-xl); overflow:hidden; cursor:pointer; box-shadow:var(--sh-2); margin-top:6px; }
+.yt-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
+.yt-thumb:hover img { transform:scale(1.04); }
+.yt-thumb .shade { position:absolute; inset:0; background:linear-gradient(180deg, rgba(20,20,20,.25), rgba(20,20,20,0) 35%, rgba(20,20,20,.55)); }
+.yt-tl { position:absolute; top:14px; left:14px; } .yt-tr { position:absolute; top:14px; right:14px; }
+.yt-play { position:absolute; left:50%; top:50%; width:72px; height:72px; margin:-36px 0 0 -36px; border-radius:50%; background:rgba(139,30,30,.92); color:#fff; display:grid; place-items:center; box-shadow:0 10px 30px rgba(0,0,0,.35); transition:transform .3s var(--spring); }
+.yt-play .ico { fill:#fff; margin-left:3px; }
+.yt-thumb:hover .yt-play { transform:scale(1.1); }
+.yt-brand { position:absolute; left:14px; bottom:14px; display:inline-flex; align-items:center; gap:8px; height:30px; padding:0 12px 0 6px; border-radius:var(--r-pill); background:rgba(20,20,20,.7); backdrop-filter:blur(8px); color:#fff; font-size:12px; font-weight:600; }
+.yt-brand i { width:22px; height:16px; border-radius:5px; background:#FF0000; display:grid; place-items:center; }
+.yt-host { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; color:var(--ink-60); }
+.yt-host img { width:26px; height:26px; border-radius:50%; object-fit:cover; object-position:65% 25%; }
+.yt-steps { margin-top:18px; padding:6px 16px; }
+.yt-steps > div { display:flex; align-items:center; gap:12px; padding:12px 0; }
+.yt-steps > div + div { border-top:1px solid var(--ink-05); }
+.yt-steps span { width:26px; height:26px; border-radius:50%; background:var(--primary-50); color:var(--primary); display:grid; place-items:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.yt-steps p { font-size:13.5px; color:var(--ink-80); line-height:1.4; }
+
+.pd-sum { padding:16px; } .pd-sum b { font-size:16px; display:block; } .pd-sum span { font-size:12.5px; color:var(--ink-60); }
+.pd-item { display:flex; gap:12px; padding:10px; cursor:pointer; transition:transform .25s var(--ease); }
+.pd-item:active { transform:scale(.98); }
+.pd-thumb { position:relative; width:128px; height:84px; border-radius:14px; overflow:hidden; flex-shrink:0; }
+.pd-thumb img { width:100%; height:100%; object-fit:cover; }
+.pd-thumb em { position:absolute; right:6px; bottom:6px; font-style:normal; font-size:10.5px; font-weight:700; color:#fff; background:rgba(20,20,20,.75); padding:2px 6px; border-radius:6px; }
+.pd-play { position:absolute; left:50%; top:50%; width:32px; height:32px; margin:-16px 0 0 -16px; border-radius:50%; background:rgba(255,255,255,.9); color:var(--primary); display:grid; place-items:center; }
+.pd-play .ico { fill:var(--primary); margin-left:2px; }
+.pd-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; justify-content:center; }
+.pd-info b { font-size:14.5px; line-height:1.25; } .pd-info > span { font-size:12px; color:var(--ink-60); }
+.pd-st { display:inline-flex !important; align-items:center; gap:4px; align-self:flex-start; margin-top:3px; height:22px; padding:0 9px; border-radius:var(--r-pill); font-size:11px !important; font-weight:700; }
+.pd-st.ok { background:var(--secondary-50); color:var(--secondary-700) !important; }
+.pd-st.miss { background:var(--primary-50); color:var(--primary) !important; }
+
+/* Devotion complete modal */
+.sf-modal { position:absolute; left:22px; right:22px; top:50%; z-index:42; background:#fff; border-radius:28px; padding:28px 22px 18px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px; opacity:0; visibility:hidden; transform:translateY(-46%) scale(.94); transition:all .4s var(--spring); box-shadow:0 30px 70px rgba(0,0,0,.35); }
+.sf-modal.open { opacity:1; visibility:visible; transform:translateY(-50%) scale(1); }
+.sf-modal > p { font-size:14px; color:var(--ink-60); line-height:1.5; }
+.dd-check { width:76px; height:76px; border-radius:50%; background:var(--grad-primary); color:#fff; display:grid; place-items:center; box-shadow:var(--sh-red); margin-bottom:4px; }
+.sf-modal.open .dd-check { animation:sfPop .6s var(--spring); }
+.dd-read { width:100%; display:flex; align-items:center; gap:12px; text-align:left; padding:12px; margin:6px 0; border-radius:var(--r-md); background:var(--secondary-50); }
+.dd-read > div { display:flex; flex-direction:column; } .dd-read b { font-size:14px; } .dd-read span { font-size:12px; color:var(--ink-60); }
+.dd-ri { width:36px; height:36px; border-radius:10px; background:var(--secondary); color:#fff; display:grid !important; place-items:center; flex-shrink:0; }
+.dd-ri .ico { color:#fff; }
+.sf-modal .btn { width:100%; }
+.yt-return { position:absolute; left:50%; bottom:104px; z-index:60; display:inline-flex; align-items:center; gap:8px; height:44px; padding:0 18px; border-radius:var(--r-pill); background:var(--ink); color:#fff; font-size:13px; white-space:nowrap; box-shadow:0 12px 30px rgba(0,0,0,.3); opacity:0; pointer-events:none; transform:translate(-50%,20px); transition:all .4s var(--spring); }
+.yt-return b { color:var(--secondary-300); }
+.yt-return.show { opacity:1; pointer-events:auto; transform:translate(-50%,0); }
+
+/* Session text: keep verse and prayer perfectly centered */
+.sf-im-body { text-align:center; padding:0 6px; }
+.sf-im-text, .sf-im-ref, .sf-step-title { width:100%; text-align:center; }
+.sf-im-text.sm { max-width:320px; margin:0 auto; }
+.sf-im-ref { display:block; margin:6px auto 0; }
