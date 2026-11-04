@@ -14,6 +14,7 @@
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="stylesheet" href="css/tokens.css?v=20261030v5">
 <link rel="stylesheet" href="css/styles.css?v=20261030v5">
+  <link rel="stylesheet" href="css/extras.css?v=20261105">
 <style>
   :root {
     --primary: #B20000 !important;
@@ -731,7 +732,7 @@
             <div class="top-bar">
               <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
               <h3>Declarations</h3>
-              <button class="icon-btn" aria-label="Create" data-toast="Write a new declaration"><svg class="ico"><use href="#i-pen"/></svg></button>
+              <button class="icon-btn" aria-label="Write a declaration" id="decl-write-btn"><svg class="ico"><use href="#i-pen"/></svg></button>
             </div>
             <div class="pad">
               <div class="sf-banner red" data-go="decl-session">
@@ -751,8 +752,8 @@
               <div class="sf-deck" data-go="decl-session" style="background:var(--ink)"><svg class="ico"><use href="#i-shield"/></svg><b>Victory</b><span>10 declarations</span></div>
               <div class="sf-deck" data-go="decl-session" style="background:linear-gradient(135deg,#8A0000,#EEB931)"><svg class="ico"><use href="#i-users"/></svg><b>Family</b><span>7 declarations</span></div>
             </div>
-            <div class="section-head"><h3 class="h-lg">Saved declarations</h3><a>See all</a></div>
-            <div class="pad sf-list">
+            <div class="section-head"><h3 class="h-lg">Saved declarations</h3><a data-go="decl-write">+ Write yours</a></div>
+            <div class="pad sf-list" id="decl-saved">
               <div class="card sf-quote-row red" data-go="decl-session"><p>“No weapon formed against me shall prosper.”</p><span>Isaiah 54:17 · Declared 24×</span></div>
               <div class="card sf-quote-row red" data-go="decl-session"><p>“The Lord is my shepherd; I lack nothing.”</p><span>Psalm 23:1 · Declared 18×</span></div>
               <div class="card sf-quote-row red" data-go="decl-session"><p>“I can do all things through Christ who strengthens me.”</p><span>Philippians 4:13 · Declared 11×</span></div>
@@ -822,7 +823,7 @@
             <div class="top-bar">
               <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
               <h3>Prayer Companion</h3>
-              <button class="icon-btn" aria-label="Prayer list" data-toast="Your prayer list"><svg class="ico"><use href="#i-list"/></svg></button>
+              <button class="icon-btn" aria-label="Prayer list" data-go="prayer-requests"><svg class="ico"><use href="#i-list"/></svg></button>
             </div>
             <div class="pad">
               <h2 class="h-display" style="font-size:28px">What’s on your heart today?</h2>
@@ -1037,15 +1038,22 @@
               <span style="width:44px"></span>
             </div>
             <div class="pad">
-              <div class="card sf-acct"><img src="assets/avatar_user.jpg" alt=""><div><b>Grace Adeyemi</b><span>grace@example.com</span></div><button class="btn btn-white btn-sm">Edit</button></div>
+              <div class="card sf-acct"><img src="assets/avatar_user.jpg" alt=""><div><b>Grace Adeyemi</b><span>grace@example.com</span></div><button class="btn btn-white btn-sm" data-go="edit-profile">Edit</button></div>
             </div>
 
             <h4 class="sf-group">My spiritual library</h4>
             <div class="card list-card sf-lib">
-              <div class="list-row" data-lib="notes"><span class="li r"><svg class="ico sm"><use href="#i-pen"/></svg></span><span class="lt">Notes<small>From your Bible reading</small></span><span class="lv">24<svg class="ico sm"><use href="#i-right"/></svg></span></div>
               <div class="list-row" data-lib="journals"><span class="li g"><svg class="ico sm"><use href="#i-feather"/></svg></span><span class="lt">Journals<small>Reflections &amp; prayers</small></span><span class="lv">18<svg class="ico sm"><use href="#i-right"/></svg></span></div>
               <div class="list-row" data-lib="testimonies"><span class="li r"><svg class="ico sm"><use href="#i-heart"/></svg></span><span class="lt">Testimonies<small>What God has done</small></span><span class="lv">6<svg class="ico sm"><use href="#i-right"/></svg></span></div>
               <div class="list-row" data-lib="confessions"><span class="li g"><svg class="ico sm"><use href="#i-sparkle"/></svg></span><span class="lt">Confessions<small>Saved &amp; personal</small></span><span class="lv">9<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+            </div>
+
+            <h4 class="sf-group">Saved &amp; personal</h4>
+            <div class="card list-card">
+              <div class="list-row" data-go="notes"><span class="li r"><svg class="ico sm"><use href="#i-pen"/></svg></span><span class="lt">Notes<small>From your Bible reading</small></span><span class="lv">3<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+              <div class="list-row" data-go="bookmarks"><span class="li g"><svg class="ico sm"><use href="#i-bookmark"/></svg></span><span class="lt">Saved Word of the Day<small>Your bookmarked verses</small></span><span class="lv">4<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+              <div class="list-row" data-go="prayer-requests"><span class="li r"><svg class="ico sm"><use href="#i-pray"/></svg></span><span class="lt">Prayer list<small>Requests &amp; answered prayers</small></span><span class="lv">3<svg class="ico sm"><use href="#i-right"/></svg></span></div>
+              <div class="list-row" data-go="decl-write"><span class="li g"><svg class="ico sm"><use href="#i-megaphone"/></svg></span><span class="lt">Write a declaration<small>Declare your own words</small></span><span class="lv"><svg class="ico sm"><use href="#i-right"/></svg></span></div>
             </div>
 
             <!-- Library panel -->
@@ -1099,7 +1107,7 @@
               <div class="stat"><b>36</b><span>Highlights</span></div>
             </div>
 
-            <div class="section-head"><h3 class="h-lg">Growth goals</h3><a>Edit</a></div>
+            <div class="section-head"><h3 class="h-lg">Growth goals</h3><a data-go="edit-profile">Edit</a></div>
             <div class="pad" style="display:flex;gap:8px;flex-wrap:wrap">
               <span class="chip chip-sm selected"><svg class="ico"><use href="#i-pray"/></svg>Prayer</span>
               <span class="chip chip-sm selected"><svg class="ico"><use href="#i-target"/></svg>Discipline</span>
@@ -1133,6 +1141,146 @@
             </div>
             <div style="height:20px"></div>
           </section>
+
+          <!-- ==================== X1. BOOKMARKED WORD OF THE DAY ==================== -->
+          <section class="screen" data-screen="bookmarks">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>Saved Word of the Day</h3>
+              <span style="width:44px"></span>
+            </div>
+            <div class="pad">
+              <p class="t-sm muted" id="bm-count" style="margin-bottom:12px">4 saved verses</p>
+              <div id="bm-list" class="ex-list"></div>
+              <div class="ex-empty" id="bm-empty" hidden><svg class="ico lg"><use href="#i-bookmark"/></svg><b>Nothing saved yet</b><p>Tap the bookmark on any Word of the Day to keep it here.</p><button class="btn btn-primary btn-sm" data-go="wotd">Open today’s word</button></div>
+            </div>
+            <div style="height:30px"></div>
+          </section>
+
+          <!-- ==================== X2. WRITE DECLARATION ==================== -->
+          <section class="screen" data-screen="decl-write">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>New Declaration</h3>
+              <span style="width:44px"></span>
+            </div>
+            <div class="pad">
+              <p class="t-sm muted">Speak it in your own words. Write a statement of faith you want to declare over your life.</p>
+              <label class="ex-field">Your declaration<textarea id="dw-text" rows="5" maxlength="200" placeholder="I am . . .  / My family is . . ."></textarea><small class="ex-count"><span id="dw-n">0</span>/200</small></label>
+              <label class="ex-field">Scripture backing (optional)<input id="dw-ref" placeholder="e.g. Romans 8:37"></label>
+              <div class="ex-label">Category</div>
+              <div class="sf-pills ex-pills" id="dw-cat">
+                <button class="pill active">Morning</button><button class="pill">Work &amp; Purpose</button><button class="pill">Victory</button><button class="pill">Family</button>
+              </div>
+              <div class="card list-card" style="margin-top:14px">
+                <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-bell"/></svg></span><span class="lt">Remind me to declare daily<small>Morning · 6:00 AM</small></span><button class="toggle on" aria-label="Daily reminder"></button></div>
+              </div>
+              <div class="ex-actions">
+                <button class="btn btn-primary" id="dw-save" disabled>Save declaration</button>
+                <button class="btn btn-ghost" id="dw-save-go" disabled>Save &amp; declare now</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ==================== X3. MY PRAYER LIST ==================== -->
+          <section class="screen" data-screen="prayer-requests">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>My Prayer List</h3>
+              <span style="width:44px"></span>
+            </div>
+            <div class="pad">
+              <div class="ex-add">
+                <input id="pr-input" placeholder="Add a prayer request…" maxlength="90">
+                <button class="btn btn-primary btn-sm" id="pr-add">Add</button>
+              </div>
+              <div class="sf-pills ex-pills" id="pr-cat">
+                <button class="pill active">Family</button><button class="pill">Healing</button><button class="pill">Guidance</button><button class="pill">Thanks</button>
+              </div>
+              <div class="seg ex-seg" id="pr-tabs"><button class="on" data-t="praying">Praying <b id="pr-n1">0</b></button><button data-t="answered">Answered <b id="pr-n2">0</b></button></div>
+              <div id="pr-list" class="ex-list"></div>
+              <div class="ex-empty" id="pr-empty" hidden><svg class="ico lg"><use href="#i-pray"/></svg><b id="pr-empty-t">No requests yet</b><p id="pr-empty-p">Write what’s on your heart and come back to pray over it.</p></div>
+            </div>
+            <div style="height:30px"></div>
+          </section>
+
+          <!-- ==================== X4. NOTES ==================== -->
+          <section class="screen" data-screen="notes">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>My Notes</h3>
+              <button class="icon-btn" id="nt-new" aria-label="New note"><svg class="ico"><use href="#i-plus"/></svg></button>
+            </div>
+            <div class="pad">
+              <input class="ex-search" id="nt-search" placeholder="Search notes or verses…">
+              <p class="t-sm muted" id="nt-count" style="margin:12px 0"></p>
+              <div id="nt-list" class="ex-list"></div>
+              <div class="ex-empty" id="nt-empty" hidden><svg class="ico lg"><use href="#i-pen"/></svg><b>No notes found</b><p>Notes you write while reading the Bible show up here.</p><button class="btn btn-primary btn-sm" id="nt-new2">Write a note</button></div>
+            </div>
+            <div style="height:30px"></div>
+          </section>
+
+          <section class="screen" data-screen="note-edit">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3 id="ne-head">New Note</h3>
+              <button class="icon-btn" id="ne-del" aria-label="Delete note"><svg class="ico"><use href="#i-x"/></svg></button>
+            </div>
+            <div class="pad">
+              <label class="ex-field">Title<input id="ne-title" placeholder="Give this note a title"></label>
+              <label class="ex-field">Verse (optional)<input id="ne-ref" placeholder="e.g. John 3:16"></label>
+              <label class="ex-field">Your note<textarea id="ne-text" rows="9" placeholder="Write what God is showing you…"></textarea></label>
+              <div class="ex-label">Visibility</div>
+              <div class="seg" id="ne-vis"><button class="on"><svg class="ico xs"><use href="#i-lock"/></svg>Private</button><button><svg class="ico xs"><use href="#i-users"/></svg>Friends</button></div>
+              <div class="ex-actions"><button class="btn btn-primary" id="ne-save">Save note</button></div>
+            </div>
+          </section>
+
+          <!-- ==================== X5. EDIT PROFILE ==================== -->
+          <section class="screen" data-screen="edit-profile">
+            <div class="top-bar">
+              <button class="icon-btn" data-back aria-label="Back"><svg class="ico"><use href="#i-left"/></svg></button>
+              <h3>Edit Profile</h3>
+              <span style="width:44px"></span>
+            </div>
+            <div class="pad">
+              <div class="ex-avatar"><div class="prof-avatar"><img src="assets/avatar_user.jpg" alt="Profile photo"></div><button class="btn btn-white btn-sm" data-toast="Choose a new photo">Change photo</button></div>
+              <label class="ex-field">Full name<input id="ep-name" value="Grace Adeyemi"></label>
+              <label class="ex-field">Username<input id="ep-user" value="@grace.walks"></label>
+              <label class="ex-field">Email<input id="ep-mail" type="email" value="grace@example.com"></label>
+              <label class="ex-field">Bio<textarea id="ep-bio" rows="3" maxlength="120">Learning to walk by faith, one day at a time.</textarea></label>
+              <div class="ex-label">Growth goals</div>
+              <div class="ex-chips" id="ep-goals">
+                <span class="chip chip-sm selected">Prayer</span><span class="chip chip-sm selected">Discipline</span><span class="chip chip-sm">Peace</span><span class="chip chip-sm">Purpose</span><span class="chip chip-sm">Community</span>
+              </div>
+              <div class="card list-card" style="margin-top:14px">
+                <div class="list-row"><span class="li"><svg class="ico sm"><use href="#i-globe"/></svg></span><span class="lt">Public profile<small>Friends can find you</small></span><button class="toggle" aria-label="Public profile"></button></div>
+              </div>
+              <div class="ex-actions"><button class="btn btn-primary" id="ep-save">Save changes</button><button class="btn btn-ghost" data-back>Cancel</button></div>
+            </div>
+          </section>
+
+          <!-- ==================== X6. MORE (WORD OF THE DAY) SHEET ==================== -->
+          <div class="sf-sheet-bg" id="more-bg"></div>
+          <div class="sf-sheet" id="more-sheet">
+            <div class="grab"></div>
+            <h3 class="h-lg">More options</h3>
+            <div class="ex-more">
+              <button data-m="copy"><span class="mi"><svg class="ico sm"><use href="#i-copy"/></svg></span>Copy verse text</button>
+              <button data-m="link"><span class="mi"><svg class="ico sm"><use href="#i-share"/></svg></span>Copy share link</button>
+              <button data-m="chapter"><span class="mi"><svg class="ico sm"><use href="#i-bible"/></svg></span>Read full chapter (Joshua 1)</button>
+              <button data-m="note"><span class="mi"><svg class="ico sm"><use href="#i-pen"/></svg></span>Add a note on this verse</button>
+              <button data-m="bookmark"><span class="mi"><svg class="ico sm"><use href="#i-bookmark"/></svg></span><span id="more-bm-t">Save to bookmarks</span></button>
+            </div>
+            <div class="ex-label" style="margin-top:4px">Share via</div>
+            <div class="ex-apps">
+              <button data-toast="Opening X…"><span style="background:#141414">X</span>X</button>
+              <button data-toast="Opening Facebook…"><span style="background:#1877F2">f</span>Facebook</button>
+              <button data-toast="Opening Telegram…"><span style="background:#229ED9">T</span>Telegram</button>
+              <button data-toast="Opening Messages…"><span style="background:#34C759">SMS</span>Message</button>
+              <button data-toast="Opening Mail…"><span style="background:#EEB931">@</span>Email</button>
+            </div>
+          </div>
 
           <!-- ============ SHARED OVERLAYS ============ -->
           <div class="audio-bar hidden" id="audio-bar">
@@ -1218,5 +1366,6 @@
 </div>
 
 <script src="js/app.js?v=20261030v5"></script>
+<script src="js/extras.js?v=20261105"></script>
 </body>
 </html>

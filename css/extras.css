@@ -1,0 +1,49 @@
+/* Extras: bookmarks, write declaration, prayer list, notes, edit profile, More sheet */
+.ex-list { display:flex; flex-direction:column; gap:10px; }
+.ex-item { background:#fff; border-radius:var(--r-lg,18px); padding:14px 16px; box-shadow:0 1px 3px rgba(20,20,20,.06); display:flex; gap:12px; cursor:pointer; }
+.ex-item > div { flex:1; min-width:0; }
+.ex-item b { font-size:14px; display:block; }
+.ex-item p { font-size:13px; color:var(--ink-60); margin-top:4px; line-height:1.45; }
+.ex-item small { font-size:11px; color:var(--ink-40); display:block; margin-top:6px; }
+.ex-item .ex-q { font-family:'Fraunces',serif; font-size:16px; color:var(--ink); line-height:1.4; margin:0; }
+.ex-item .ex-ref { color:var(--primary); font-size:12px; font-weight:600; margin-top:8px; display:block; }
+.ex-item .ex-btns { display:flex; flex-direction:column; gap:6px; }
+.ex-item .ex-btns button, .ex-x { width:32px; height:32px; border-radius:50%; background:var(--ink-05); color:var(--ink-60); display:grid; place-items:center; border:0; cursor:pointer; }
+.ex-item .ex-btns button.on { background:var(--primary-50); color:var(--primary); }
+.ex-empty { text-align:center; padding:40px 20px; display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--ink-60); }
+.ex-empty b { color:var(--ink); font-size:16px; } .ex-empty p { font-size:13px; max-width:240px; }
+.ex-empty .ico.lg { color:var(--secondary); width:36px; height:36px; }
+.ex-empty[hidden] { display:none; }
+.ex-field { display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--ink-60); margin-top:14px; position:relative; }
+.ex-field input, .ex-field textarea { border-radius:var(--r-md,14px); border:1px solid var(--ink-10); padding:12px 14px; font:inherit; font-size:15px; color:var(--ink); background:#fff; outline:none; resize:none; }
+.ex-field input { height:48px; padding:0 14px; }
+.ex-field input:focus, .ex-field textarea:focus { border-color:var(--primary); }
+.ex-count { align-self:flex-end; font-size:11px; color:var(--ink-40); }
+.ex-label { font-size:13px; color:var(--ink-60); margin:16px 0 8px; }
+.ex-pills { padding:0; margin:0 0 4px; display:flex; flex-wrap:wrap; gap:8px; }
+.ex-actions { display:flex; flex-direction:column; gap:8px; margin:22px 0 30px; }
+.ex-actions .btn[disabled] { opacity:.45; pointer-events:none; }
+.ex-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.ex-chips .chip { cursor:pointer; }
+.ex-add { display:flex; gap:8px; margin-bottom:12px; }
+.ex-add input, .ex-search { flex:1; height:46px; border-radius:var(--r-md,14px); border:1px solid var(--ink-10); padding:0 14px; font-size:14px; background:#fff; outline:none; width:100%; }
+.ex-add input:focus, .ex-search:focus { border-color:var(--primary); }
+.ex-seg { display:flex; margin:14px 0; background:var(--ink-05); border-radius:14px; padding:4px; }
+.ex-seg button { flex:1; height:38px; border-radius:11px; font-size:13px; font-weight:600; color:var(--ink-60); border:0; background:transparent; cursor:pointer; }
+.ex-seg button.on { background:#fff; color:var(--primary); box-shadow:0 1px 3px rgba(20,20,20,.1); }
+.ex-chk { width:26px; height:26px; border-radius:50%; border:2px solid var(--ink-10); background:#fff; display:grid; place-items:center; color:#fff; cursor:pointer; flex:none; margin-top:1px; }
+.ex-item.done .ex-chk { background:var(--secondary); border-color:var(--secondary); }
+.ex-item.done .ex-t { text-decoration:line-through; color:var(--ink-40); }
+.ex-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--primary); background:var(--primary-50); padding:2px 8px; border-radius:20px; margin-right:6px; }
+.ex-pray-n { font-size:11px; color:var(--ink-40); }
+.ex-avatar { display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:6px; }
+.ex-avatar .prof-avatar { margin:0; }
+.ex-more { display:flex; flex-direction:column; }
+.ex-more button { display:flex; align-items:center; gap:14px; height:52px; font-size:15px; font-weight:500; color:var(--ink); border:0; background:transparent; border-top:1px solid var(--ink-05); text-align:left; cursor:pointer; }
+.ex-more button:first-child { border-top:0; }
+.ex-more .mi { width:34px; height:34px; border-radius:50%; background:var(--primary-50); color:var(--primary); display:grid; place-items:center; }
+.ex-apps { display:flex; justify-content:space-between; gap:6px; }
+.ex-apps button { display:flex; flex-direction:column; align-items:center; gap:6px; font-size:11px; color:var(--ink-60); border:0; background:transparent; cursor:pointer; flex:1; }
+.ex-apps span { width:44px; height:44px; border-radius:50%; color:#fff; font-weight:700; font-size:13px; display:grid; place-items:center; }
+#btn-save-wotd.saved { color:var(--primary); }
+#btn-save-wotd.saved svg { fill:var(--primary); }

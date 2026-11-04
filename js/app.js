@@ -9,7 +9,7 @@
   const screens = $$('.screen');
   const order = ['splash', 'signin', 'goals', 'time', 'translation', 'prefs', 'home', 'live', 'past-devotions', 'bible', 'discover',
     'dev-list', 'dev-read', 'conf-list', 'conf-session', 'decl-list', 'decl-session', 'plans-list', 'pray-list', 'pray-session', 'complete',
-    'plan', 'wotd', 'profile', 'streak', 'settings'];
+    'plan', 'wotd', 'bookmarks', 'profile', 'streak', 'settings', 'edit-profile', 'notes', 'note-edit', 'decl-write', 'prayer-requests'];
   const tabbar = $('#tabbar');
   const audioBar = $('#audio-bar');
   let current = null;
